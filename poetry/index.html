@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Letters Never Sent — Cat Hermoso</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Upright:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Sacramento&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    /* ── RESET ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── VARIABLES ──────────────────────────────────────────── */
+    :root {
+      --cream:        #f5f0e8;
+      --cream-dark:   #ede5d0;
+      --cream-shadow: #d9cdb4;
+      --crimson:      #7a1422;
+      --crimson-mid:  #9b2032;
+      --crimson-light:#c0394a;
+      --ink:          #2c1a1a;
+      --gold:         #b8965a;
+      --gold-light:   #d4b07a;
+    }
+
+    /* ── BASE ───────────────────────────────────────────────── */
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'IM Fell English', serif;
+      background-color: var(--cream);
+      color: var(--crimson);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Subtle paper texture overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 27px,
+          rgba(184,150,90,.08) 28px
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── SIDEBAR NAV ────────────────────────────────────────── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: 270px;
+      height: 100vh;
+      background: linear-gradient(160deg, #3a0a10 0%, #6a1220 60%, #8b1a28 100%);
+      border-right: 3px solid var(--gold);
+      display: flex;
+      flex-direction: column;
+      padding: 36px 24px 32px;
+      z-index: 100;
+      overflow-y: auto;
+      box-shadow: 4px 0 20px rgba(0,0,0,.35);
+      transition: transform .3s ease;
+    }
+
+    .sidebar-title {
+      font-family: 'Sacramento', cursive;
+      color: var(--gold-light);
+      font-size: 2rem;
+      line-height: 1.2;
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .sidebar-author {
+      font-family: 'Cormorant Upright', serif;
+      color: rgba(255,255,255,.6);
+      font-size: .8rem;
+      letter-spacing: .15em;
+      text-align: center;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+    }
+
+    .sidebar-divider {
+      width: 60%;
+      border: none;
+      border-top: 1px solid var(--gold);
+      margin: 0 auto 28px;
+      opacity: .5;
+    }
+
+    .nav-label {
+      font-family: 'Cormorant Upright', serif;
+      color: rgba(255,255,255,.4);
+      font-size: .8rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding-left: 4px;
+    }
+
+    .nav-list {
+      list-style: none;
+      flex: 1;
+    }
+
+    .nav-list li + li { margin-top: 4px; }
+
+    .nav-list a {
+      display: block;
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      color: rgba(255,245,230,.78);
+      font-size: 1rem;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      border-left: 2px solid transparent;
+      transition: all .2s ease;
+      line-height: 1.3;
+    }
+
+    .nav-list a:hover,
+    .nav-list a.active {
+      color: var(--gold-light);
+      border-left-color: var(--gold);
+      background: rgba(255,255,255,.07);
+    }
+
+    /* Hamburger (mobile) */
+    .hamburger {
+      display: none;
+      position: fixed;
+      top: 16px; left: 16px;
+      z-index: 200;
+      background: var(--crimson);
+      border: 1px solid var(--gold);
+      border-radius: 6px;
+      width: 44px; height: 44px;
+      cursor: pointer;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px; height: 2px;
+      background: var(--gold-light);
+      transition: .3s;
+    }
+
+    /* ── MAIN CONTENT ───────────────────────────────────────── */
+    .main {
+      margin-left: 270px;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── HERO ───────────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 48px;
+      background:
+        radial-gradient(ellipse at 50% 40%, rgba(122,20,34,.06) 0%, transparent 70%);
+      border-bottom: 1px solid var(--cream-shadow);
+      position: relative;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .hero-eyebrow {
+      font-family: 'Cormorant Upright', serif;
+      font-size: .75rem;
+      letter-spacing: .3em;
+      color: var(--crimson-mid);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-family: 'Sacramento', cursive;
+      font-size: clamp(3.5rem, 8vw, 6rem);
+      color: var(--crimson);
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Upright', serif;
+      font-size: 1.75rem;
+      font-style: italic;
+      color: var(--crimson);
+      letter-spacing: .08em;
+      margin-bottom: 32px;
+    }
+
+    .hero-dedication {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 1.3rem;
+      color: var(--crimson-mid);
+      max-width: 500px;
+      line-height: 1.7;
+      opacity: .8;
+      margin-bottom: 48px;
+      padding: 20px 28px;
+      border: 1px solid rgba(122,20,34,.2);
+      background: rgba(255,255,255,.4);
+      border-radius: 2px;
+    }
+
+    .hero-quill {
+      font-size: 2.5rem;
+      opacity: .35;
+      margin-bottom: 32px;
+    }
+
+    .hero-scroll-hint {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Cormorant Upright', serif;
+      font-size: .72rem;
+      letter-spacing: .2em;
+      color: rgba(44,26,26,.4);
+      text-transform: uppercase;
+      animation: fadeUp 2s ease infinite alternate;
+    }
+
+    .hero-scroll-hint::after {
+      content: '↓';
+      font-size: 1rem;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: .3; transform: translateY(0); }
+      to   { opacity: .7; transform: translateY(6px); }
+    }
+
+    /* ── INTRO SECTION ──────────────────────────────────────── */
+    .intro-section {
+      padding: 80px 80px 60px;
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .intro-quote {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 1.25rem;
+      color: var(--crimson);
+      line-height: 1.75;
+      margin-bottom: 12px;
+    }
+
+    .intro-quote-attr {
+      font-family: 'Cormorant Upright', serif;
+      font-size: .9rem;
+      letter-spacing: .12em;
+      color: var(--crimson-mid);
+      margin-bottom: 40px;
+    }
+
+    .intro-prose {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.4rem;
+      line-height: 2;
+      color: var(--crimson);
+      text-align: left;
+    }
+
+    .intro-prose p + p { margin-top: 1em; }
+
+    .intro-copyright {
+      font-family: 'Cormorant Upright', serif;
+      font-size: .82rem;
+      letter-spacing: .12em;
+      color: var(--crimson-mid);
+      text-align: center;
+      margin-top: 32px;
+    }
+
+    /* ── POEM PAGES ─────────────────────────────────────────── */
+    .poem-page {
+      min-height: 100vh;
+      padding: 80px 80px 100px;
+      border-top: 1px solid var(--cream-shadow);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .poem-page:nth-child(even) {
+      background: rgba(237,229,208,.35);
+    }
+
+    /* Top rule */
+    .poem-page::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+    }
+
+    /* Page number ornament */
+    .page-number {
+      position: absolute;
+      top: 28px; right: 48px;
+      font-family: 'Cormorant Upright', serif;
+      font-size: .7rem;
+      color: rgba(44,26,26,.3);
+      letter-spacing: .2em;
+    }
+
+    .poem-section-label {
+      font-family: 'Cormorant Upright', serif;
+      font-size: .65rem;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--crimson-mid);
+      margin-bottom: 20px;
+    }
+
+    .poem-title {
+      font-family: 'Sacramento', cursive;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      color: var(--crimson);
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .poem-subtitle {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: rgba(44,26,26,.5);
+      margin-bottom: 40px;
+    }
+
+    /* Decorative quill divider */
+    .poem-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 36px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .poem-divider::before,
+    .poem-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-light));
+    }
+
+    .poem-divider::after {
+      background: linear-gradient(90deg, var(--gold-light), transparent);
+    }
+
+    .poem-divider-icon {
+      color: var(--gold);
+      font-size: .85rem;
+    }
+
+    /* The poem body */
+    .poem-body {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.35rem;
+      line-height: 1.8;
+      color: var(--crimson);
+      max-width: 600px;
+    }
+
+    .poem-body p {
+      margin-bottom: 1.4em;
+    }
+
+    .poem-body p:last-child { margin-bottom: 0; }
+
+    /* Stanza — each stanza separated by a blank line */
+    .stanza { margin-bottom: 1.6em; }
+    .stanza:last-child { margin-bottom: 0; }
+
+    .poem-line { display: block; }
+
+    /* Notes */
+    .poem-notes {
+      margin-top: 48px;
+      padding: 20px 28px;
+      background: rgba(255,255,255,.45);
+      border-left: 3px solid var(--gold-light);
+      max-width: 650px;
+      font-family: 'Cormorant Upright', serif;
+      font-size: 1.04rem;
+      font-style: italic;
+      color: rgba(44,26,26,.80);
+      line-height: 1.75;
+    }
+
+    .poem-notes strong {
+      display: block;
+      font-style: normal;
+      font-size: .85rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--crimson-mid);
+      margin-bottom: 8px;
+    }
+
+    .poem-copyright {
+      margin-top: 36px;
+      font-family: 'Cormorant Upright', serif;
+      font-size: .92rem;
+      letter-spacing: .08em;
+      color: rgba(44,26,26,.80);
+    }
+
+    /* ── ABOUT SECTION ──────────────────────────────────────── */
+    .about-section {
+      padding: 80px 80px 100px;
+      border-top: 1px solid var(--cream-shadow);
+      background: linear-gradient(160deg, rgba(122,20,34,.04) 0%, transparent 60%);
+      position: relative;
+    }
+
+    .about-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 10%; right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+    }
+
+    .about-inner {
+      max-width: 640px;
+    }
+
+    .about-title {
+      font-family: 'Sacramento', cursive;
+      font-size: 2.8rem;
+      color: var(--crimson);
+      margin-bottom: 28px;
+    }
+
+    .about-text {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.25rem;
+      line-height: 2;
+      color: var(--crimson);
+    }
+
+    .about-text em { color: var(--crimson); font-style: italic; }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--cream-shadow);
+      padding: 32px 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Cormorant Upright', serif;
+      font-size: .9rem;
+      letter-spacing: .15em;
+      color: rgba(44,26,26,.38);
+      text-transform: uppercase;
+    }
+
+    footer .footer-brand {
+      font-family: 'Sacramento', cursive;
+      font-size: 1.2rem;
+      color: var(--crimson);
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    /* ── BACK TO TOP ────────────────────────────────────────── */
+    .back-top {
+      position: fixed;
+      bottom: 32px; right: 32px;
+      width: 44px; height: 44px;
+      background: var(--crimson);
+      color: var(--gold-light);
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      z-index: 99;
+      text-decoration: none;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .3s, transform .3s;
+      box-shadow: 0 4px 16px rgba(0,0,0,.25);
+    }
+
+    .back-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── MOBILE ─────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 250px;
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open { transform: translateX(0); }
+
+      .hamburger { display: flex; }
+
+      .main { margin-left: 0; }
+
+      .hero { padding: 80px 28px 60px; }
+
+      .intro-section { padding: 60px 28px 40px; }
+
+      .poem-page { padding: 60px 28px 80px; }
+
+      .about-section { padding: 60px 28px 80px; }
+
+      footer { padding: 24px 28px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+
+    /* ── OVERLAY (mobile sidebar backdrop) ─────────────────── */
+    .overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 90;
+    }
+
+    .overlay.open { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- ══ HAMBURGER ══════════════════════════════════════════════ -->
+<button class="hamburger" id="hamburger" aria-label="Open menu">
+  <span></span><span></span><span></span>
+</button>
+<div class="overlay" id="overlay"></div>
+
+<!-- ══ SIDEBAR ════════════════════════════════════════════════ -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-title">Letters<br/>Never Sent</div>
+  <div class="sidebar-author">Cat Hermoso</div>
+  <hr class="sidebar-divider" />
+  <p class="nav-label">Poems &amp; Essays</p>
+  <ul class="nav-list">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#mommy-clarita">In Memoriam: Mommy Clarita</a></li>
+    <li><a href="#guiding-light">Guiding Light (Mama)</a></li>
+    <li><a href="#lolo-zimo">In Memoriam: Lolo Zimo</a></li>
+    <li><a href="#paper-dreams">Paper Dreams</a></li>
+    <li><a href="#friend">Friend</a></li>
+    <li><a href="#insomnia">Insomnia</a></li>
+    <li><a href="#navigating-silence">Navigating Silence</a></li>
+    <li><a href="#poets-garden">The Poet's Garden</a></li>
+    <li><a href="#astronomer">Astronomer's Lament</a></li>
+    <li><a href="#about">About the Author</a></li>
+  </ul>
+</nav>
+
+<!-- ══ MAIN ═══════════════════════════════════════════════════ -->
+<main class="main">
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-eyebrow">A collection of essays and poems</div>
+    <h1 class="hero-title">Letters Never Sent</h1>
+    <div class="hero-subtitle">by Cat Hermoso &ensp;·&ensp; Copyright 1996–2026</div>
+    <div class="hero-dedication">
+      To Mama, Mommy, Lola and Lolo:<br/>You are forever remembered with love.<br/><br/>
+      To all my family and friends: Thank you for reading.
+    </div>
+    <div class="hero-quill">✒</div>
+    <div class="hero-scroll-hint">Begin Reading</div>
+  </section>
+
+  <!-- INTRODUCTION -->
+  <section class="poem-page" id="introduction">
+    <span class="page-number">Introduction</span>
+    <div class="poem-section-label">Opening</div>
+    <h2 class="poem-title">Introduction</h2>
+    <div class="poem-divider"><span class="poem-divider-icon">✦</span></div>
+
+    <div class="poem-body" style="font-size:1.35rem;">
+      <div class="stanza">
+        <p class="intro-quote" style="font-style:italic; color:var(--crimson); font-size:1.25rem; margin-bottom:6px;">
+          "Give sorrow words; the grief that does not speak knits up the o'er wrought heart and bids it break."
+        </p>
+        <p style="font-family:'Cormorant Upright',serif; font-size:.8rem; letter-spacing:.1em; color:rgba(44,26,26,.5); margin-bottom:32px;">
+          — William Shakespeare, Macbeth
+        </p>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">I do not know what calls me,</span>
+        <span class="poem-line">what impulse drives me to write—</span>
+        <span class="poem-line">only that fleeting landscapes haunt me.</span>
+        <span class="poem-line">A pressure builds within — unrelenting.</span>
+        <span class="poem-line">And only the cascade of ink on paper</span>
+        <span class="poem-line">brings relief.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">The words that spill onto the parchment</span>
+        <span class="poem-line">are tears I have not wept.</span>
+      </div>
+      <p style="font-family:'IM Fell English',serif; font-size:1.35rem; line-height:1.85; color:rgba(44,26,26,.80); text-align:left; margin:32px 0;">
+        <em>Letters Never Sent</em> is an intimate collection of poems written for those who now exist only in memory. The poems are unsent letters to the lost, the distant, and the once-beloved. Moving between grief and wonder, the collection gathers reflections on friendship, childhood, and the vast, unanswering universe, where what was unspoken is finally given voice.
+      </p>
+    </div>
+    <div class="poem-copyright">Copyright 2026. Cat Hermoso.</div>
+  </section>
+
+  <!-- IN MEMORIAM: MOMMY CLARITA -->
+  <section class="poem-page" id="mommy-clarita">
+    <span class="page-number">In Memoriam</span>
+    <div class="poem-section-label">In Memoriam</div>
+    <h2 class="poem-title">In Memoriam:<br/>Mommy Clarita</h2>
+    <div class="poem-divider"><span class="poem-divider-icon">✦</span></div>
+
+    <div class="poem-body">
+      <div class="stanza">
+        <span class="poem-line">Well-loved books crumble to dust—</span>
+        <span class="poem-line">yet the words live on in memory,</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">Beloved toys, worn out by time—</span>
+        <span class="poem-line">but childhood laughter echoes.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">Petals withered by sun and wind—</span>
+        <span class="poem-line">still the fragrance lingers,</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">Words of a favored song are half-forgot—</span>
+        <span class="poem-line">but the melody timbres in the soul.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">What the heart once loved, it can never lose,</span>
+        <span class="poem-line">And souls entwined, not even Death could cleave;</span>
+        <span class="poem-line">Though memory's embers dim with time,</span>
+        <span class="poem-line">Love eternally blooms.</span>
+      </div>
+    </div>
+
+    <div class="poem-copyright">Copyright 1996. Revised 2025. Cat Hermoso.</div>
+
+    <div class="poem-notes">
+      <strong>Note</strong>
+      I was privileged to have had two mothers in my life. Mommy was my paternal grandmother. From her I learned to love musicals and classical movies. During siesta in the afternoons, we would lie down side by side in her bed and read books and magazines while watching old movies or musicals. She was a passionate cook and baker. She also loved tending to her roses and orchids in her garden.
+    </div>
+  </section>
+
+  <!-- GUIDING LIGHT (MAMA) -->
+  <section class="poem-page" id="guiding-light">
+    <span class="page-number">In Memoriam</span>
+    <div class="poem-section-label">In Memoriam</div>
+    <h2 class="poem-title">Guiding Light</h2>
+    <div class="poem-subtitle">for Mama</div>
+    <div class="poem-divider"><span class="poem-divider-icon">✦</span></div>
+
+    <div class="poem-body">
+      <div class="stanza">
+        <span class="poem-line">You look down on the ground:</span>
+        <span class="poem-line">Weeds crown her tombstone now,</span>
+        <span class="poem-line">Grown through cracks on marble.</span>
+        <span class="poem-line">Sun and rain has aged the stone,</span>
+        <span class="poem-line">dulled your grief, but not the longing.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">You kneel to light the candle</span>
+        <span class="poem-line">you have brought with you.</span>
+        <span class="poem-line">An offering to guide her spirit home:</span>
+        <span class="poem-line">You strike the match,</span>
+        <span class="poem-line">a golden flame blooms in your hand</span>
+        <span class="poem-line">burning yellow-bright</span>
+        <span class="poem-line">in the deepening twilight.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">You close your eyes and recall:</span>
+        <span class="poem-line">the lilting sound of her soulful voice,</span>
+        <span class="poem-line">as she sang and strummed her guitar.</span>
+        <span class="poem-line">A sudden breeze blows out your flame,</span>
+        <span class="poem-line">And you stagger in the sudden dark.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">You blindly stumble 'til one by one,</span>
+        <span class="poem-line">the scattered stars whisper into existence.</span>
+        <span class="poem-line">And you gaze up in pure awe</span>
+        <span class="poem-line">At the river of stars poured out above you,</span>
+        <span class="poem-line">Winding brightly across the night sky:</span>
+        <span class="poem-line">She lights the path to guide you home.</span>
+      </div>
+    </div>
+
+    <div class="poem-copyright">Revised 2025. Cat Hermoso.</div>
+
+    <div class="poem-notes">
+      <strong>Note</strong>
+      Mama's favorite song was Debbie Boone's "You Light Up My Life." She had a sweet singing voice before a nodule near her vocal chords made her voice raspy and hoarse in the latter part of her life. But I still remember how she loved to sing and play on her guitar.
+    </div>
+  </section>
+
+  <!-- IN MEMORIAM: LOLO ZIMO -->
+  <section class="poem-page" id="lolo-zimo">
+    <span class="page-number">In Memoriam</span>
+    <div class="poem-section-label">In Memoriam</div>
+    <h2 class="poem-title">In Memoriam:<br/>Lolo Zimo</h2>
+    <div class="poem-divider"><span class="poem-divider-icon">✦</span></div>
+
+    <div class="poem-body">
+      <div class="stanza">
+        <span class="poem-line">He would often gaze out into his cornfields</span>
+        <span class="poem-line">with stalks that stood as tall as men</span>
+        <span class="poem-line">to consider the season's harvest.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">His hands were large and rough,</span>
+        <span class="poem-line">dark as the fertile earth he toiled.</span>
+        <span class="poem-line">Strong arms swinging the heavy pick</span>
+        <span class="poem-line">to break the rocks, his cupped hands</span>
+        <span class="poem-line">gently laying the kernels for the next harvest.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">When clouds darkened the horizon,</span>
+        <span class="poem-line">He would fall silent, listen to the whispers</span>
+        <span class="poem-line">of the wind to foretell when the rains would come.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">I remember how he stood,</span>
+        <span class="poem-line">proud ruler of his green demesne.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">Now, he lies in his hospital bed, grown pale.</span>
+        <span class="poem-line">A plant leeched of chlorophyll</span>
+        <span class="poem-line">withering from lack of sun.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">Age has withered his limbs,</span>
+        <span class="poem-line">His eyes grow clouded,</span>
+        <span class="poem-line">Each rattling breath a struggle.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">He is fed nourishment through plastic tubes,</span>
+        <span class="poem-line">And sleeps his remaining days within white walls,</span>
+        <span class="poem-line">losing himself deeper into memory and shadow.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">In His wisdom, the Sower calls His seed</span>
+        <span class="poem-line">to the final harvest, freeing him from the tangle</span>
+        <span class="poem-line">of plastic tubes and withered flesh.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">With tender hands, The Maker</span>
+        <span class="poem-line">lays him down to his peaceful rest,</span>
+        <span class="poem-line">cradled by the rich, dark earth</span>
+        <span class="poem-line">he once called home.</span>
+      </div>
+    </div>
+
+    <div class="poem-copyright">Copyright 2017. Revised 2025. Cat Hermoso.</div>
+
+    <div class="poem-notes">
+      <strong>Note</strong>
+      Lolo Zosimo and Lola Leoncia were farmers. I remember spending time in their farm during summer. As a city girl, the farm was an amazing place to be. I was amazed at the chickens and goats they raised, and the crops that my grandparents planted and harvested. Multiple stacks of dried corn filling every available space in their house.
+    </div>
+  </section>
+
+  <!-- PAPER DREAMS -->
+  <section class="poem-page" id="paper-dreams">
+    <span class="page-number">Paper Dreams</span>
+    <div class="poem-section-label">Poem</div>
+    <h2 class="poem-title">Paper Dreams</h2>
+    <div class="poem-divider"><span class="poem-divider-icon">✦</span></div>
+
+    <div class="poem-body">
+      <div class="stanza">
+        <span class="poem-line">I remember the wind—</span>
+        <span class="poem-line">its phantom fingers</span>
+        <span class="poem-line">running through my hair,</span>
+        <span class="poem-line">tendrils brushing against my cheeks.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">I remember the sky—</span>
+        <span class="poem-line">clouds chasing each other</span>
+        <span class="poem-line">across a sweeping canvas</span>
+        <span class="poem-line">of vivid cerulean.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">I remember laughter—</span>
+        <span class="poem-line">the tinkling clarity of a child's joy,</span>
+        <span class="poem-line">yet untouched by despair.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">I remember my kite—</span>
+        <span class="poem-line">bits of colored parchment and bamboo,</span>
+        <span class="poem-line">bound together with nothing but string,</span>
+        <span class="poem-line">rice paste, and faith in dreams.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">I remember as it soared high,</span>
+        <span class="poem-line">buffeted by unseen hands,</span>
+        <span class="poem-line">my ungainly, misshapen bird</span>
+        <span class="poem-line">marring heaven's blue expanse.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">I remember the battle of wills:</span>
+        <span class="poem-line">the surging currents of the wind</span>
+        <span class="poem-line">tugging at the strings,</span>
+        <span class="poem-line">trying to wrest my kite from untried hands.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">But youthful stubbornness</span>
+        <span class="poem-line">and pure faith held it aloft,</span>
+        <span class="poem-line">though I had only anchored it</span>
+        <span class="poem-line">with the slenderest of strings.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">And the wind, vanquished, carried</span>
+        <span class="poem-line">the echoes of my lilting laughter</span>
+        <span class="poem-line">across rolling hills and verdant plains,</span>
+        <span class="poem-line">up to the sky to fuel my paper sails.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">I remember still—</span>
+        <span class="poem-line">as my fading eyes track a kite's course,</span>
+        <span class="poem-line">or when a summer breeze</span>
+        <span class="poem-line">tosses a string of children's laughter to my ears.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">Remembering… I close my eyes and smile,</span>
+        <span class="poem-line">And dream of paper wings rising to the sky.</span>
+      </div>
+    </div>
+
+    <div class="poem-copyright">Copyright 7 Jun 2009. Revised 23 February 2025. Cat Hermoso.</div>
+  </section>
+
+  <!-- FRIEND -->
+  <section class="poem-page" id="friend">
+    <span class="page-number">Friend</span>
+    <div class="poem-section-label">Poem</div>
+    <h2 class="poem-title">Friend</h2>
+    <div class="poem-divider"><span class="poem-divider-icon">✦</span></div>
+
+    <div class="poem-body">
+      <div class="stanza">
+        <span class="poem-line">You who echoed my laughter</span>
+        <span class="poem-line">And dried all my tears,</span>
+        <span class="poem-line">Gave me a shoulder to cry on</span>
+        <span class="poem-line">And soothed all my fears.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">You who stood by me</span>
+        <span class="poem-line">When I needed you near,</span>
+        <span class="poem-line">Listened to my woes</span>
+        <span class="poem-line">When I needed an ear.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">You who spoke the kind words</span>
+        <span class="poem-line">I longed to hear,</span>
+        <span class="poem-line">When my spirit was heavy,</span>
+        <span class="poem-line">You gifted me laughter amidst tears.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">You who helped me see</span>
+        <span class="poem-line">The lesson behind the pain,</span>
+        <span class="poem-line">Held my hand in the dark,</span>
+        <span class="poem-line">Sheltered me from the rain.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">You who gave me faith</span>
+        <span class="poem-line">To help me endure,</span>
+        <span class="poem-line">Cheered my triumphs and in failures</span>
+        <span class="poem-line">You were always there to assure.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">You who uncovered my eyes,</span>
+        <span class="poem-line">Revealing my true self,</span>
+        <span class="poem-line">Discovered the strength</span>
+        <span class="poem-line">I had yet to find in myself.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">I am honored to call you 'Friend',</span>
+        <span class="poem-line">But this word alone cannot contain</span>
+        <span class="poem-line">All the gratitude and love,</span>
+        <span class="poem-line">Our bond—the strongest chain.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">So all I ask is this:</span>
+        <span class="poem-line">A simple chance to be</span>
+        <span class="poem-line">The friend to you</span>
+        <span class="poem-line">You've always been to me.</span>
+      </div>
+    </div>
+
+    <div class="poem-copyright">Copyright 2002. Revised 2025. Cat Hermoso.</div>
+  </section>
+
+  <!-- INSOMNIA -->
+  <section class="poem-page" id="insomnia">
+    <span class="page-number">Insomnia</span>
+    <div class="poem-section-label">Poem</div>
+    <h2 class="poem-title">Insomnia</h2>
+    <div class="poem-divider"><span class="poem-divider-icon">✦</span></div>
+
+    <div class="poem-body">
+      <div class="stanza">
+        <span class="poem-line">At night, when shadows start to play,</span>
+        <span class="poem-line">The me I know begins to fray.</span>
+        <span class="poem-line">And I begin to say</span>
+        <span class="poem-line">The words best left unsaid,</span>
+        <span class="poem-line">At night, when shadows play.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">Emptied of secrets, unplugged and lost,</span>
+        <span class="poem-line">Still no closer to the me I seek,</span>
+        <span class="poem-line">I turn and toss.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">Sanity returns at break of day.</span>
+        <span class="poem-line">But I dread the creeping gray,</span>
+        <span class="poem-line">When the me I know, begins to fray.</span>
+      </div>
+    </div>
+
+    <div class="poem-copyright">Copyright 2003. Revision 2025. Cat Hermoso.</div>
+  </section>
+
+  <!-- NAVIGATING SILENCE -->
+  <section class="poem-page" id="navigating-silence">
+    <span class="page-number">Navigating Silence</span>
+    <div class="poem-section-label">Poem</div>
+    <h2 class="poem-title">Navigating Silence</h2>
+    <div class="poem-divider"><span class="poem-divider-icon">✦</span></div>
+
+    <div class="poem-body">
+      <div class="stanza">
+        <span class="poem-line">Is it just my mind that conjures</span>
+        <span class="poem-line">specters, in the wake</span>
+        <span class="poem-line">of your sentences?</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">My fears that populate</span>
+        <span class="poem-line">pockets of silence</span>
+        <span class="poem-line">with the treacherous eddies</span>
+        <span class="poem-line">of suspicion?</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">What is left unsaid</span>
+        <span class="poem-line">teases tempests,</span>
+        <span class="poem-line">swirling thought to chaos;</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">And your silence is a sea</span>
+        <span class="poem-line">I cannot navigate, where tracing</span>
+        <span class="poem-line">constellations lead</span>
+        <span class="poem-line">to isolated continents.</span>
+      </div>
+    </div>
+
+    <div class="poem-copyright">Copyright 2007. Revised 2025. Cat Hermoso.</div>
+  </section>
+
+  <!-- THE POET'S GARDEN -->
+  <section class="poem-page" id="poets-garden">
+    <span class="page-number">The Poet's Garden</span>
+    <div class="poem-section-label">Poem</div>
+    <h2 class="poem-title">The Poet's Garden</h2>
+    <div class="poem-divider"><span class="poem-divider-icon">✦</span></div>
+
+    <div class="poem-body">
+      <div class="stanza">
+        <span class="poem-line">I pluck whispers from a passing breeze,</span>
+        <span class="poem-line">warm them in my hands, coax and tease</span>
+        <span class="poem-line">each word 'til it blooms and unfurls,</span>
+        <span class="poem-line">and loose their fragrant meaning into the world.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">With patient hands, I prune what overgrows,</span>
+        <span class="poem-line">shape each line 'til its true form shows.</span>
+        <span class="poem-line">In shade and light, my woven verses bear,</span>
+        <span class="poem-line">my laughter,  dreams, and despair.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">And in this garden where words flower,</span>
+        <span class="poem-line">I find my purpose, peace and power.</span>
+      </div>
+    </div>
+
+    <div class="poem-copyright">Copyright 2020. Revised 2026. Cat Hermoso.</div>
+  </section>
+
+  <!-- ASTRONOMER'S LAMENT -->
+  <section class="poem-page" id="astronomer">
+    <span class="page-number">Astronomer's Lament</span>
+    <div class="poem-section-label">Poem</div>
+    <h2 class="poem-title">Astronomer's Lament</h2>
+    <div class="poem-divider"><span class="poem-divider-icon">✦</span></div>
+
+    <div class="poem-body">
+      <div class="stanza">
+        <span class="poem-line">I search celestial spheres,</span>
+        <span class="poem-line">hoping to find eyes</span>
+        <span class="poem-line">gazing upon me here.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">Sorting through galaxies, I find</span>
+        <span class="poem-line">only ghost-lights—</span>
+        <span class="poem-line">frozen echoes of worlds long lost,</span>
+        <span class="poem-line">their suns turned dark,</span>
+        <span class="poem-line">long before the dinosaurs roamed.</span>
+      </div>
+      <div class="stanza">
+        <span class="poem-line">So I launch messages into the void,</span>
+        <span class="poem-line">past comets and asteroids,</span>
+        <span class="poem-line">While I wait—clock ticking—</span>
+        <span class="poem-line">on this rock spinning, </span>
+        <span class="poem-line">as it circles a dying star.</span>
+      </div>
+       </section>
+
+  <!-- ABOUT THE AUTHOR -->
+  <section class="about-section" id="about">
+    <div class="about-inner">
+      <h2 class="about-title">About the Author</h2>
+      <div class="poem-divider" style="max-width:320px; margin-bottom:32px;"><span class="poem-divider-icon">✦</span></div>
+      <p class="about-text">
+        <em>"Letters Never Sent"</em> are whispered goodbyes to loved ones who have journeyed beyond, and unsung odes to the cherished family and friends who remain.
+      </p>
+      <br/>
+      <p class="about-text">
+        When not crafting verses, Cat indulges in the delightful alchemy of collecting inks and fountain pens and assembling custom mechanical keyboards, entranced by the swirl of ink on paper and the staccato cadence of keystrokes.
+      </p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-brand">Letters Never Sent</span>
+    <span>© 1996–2026 Cat Hermoso · All rights reserved.</span>
+    <span><a href="/" style="color:inherit;text-decoration:none;">Copyright 2026. LexNotesPH. Atty. Cat Hermoso.</a></span>
+  </footer>
+
+</main>
+
+<!-- Back to top -->
+<a href="#hero" class="back-top" id="backTop" aria-label="Back to top">↑</a>
+
+<script>
+  // ── Active nav link on scroll ──────────────────────────────
+  const sections = document.querySelectorAll('[id]');
+  const navLinks = document.querySelectorAll('.nav-list a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`.nav-list a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+
+  // ── Back-to-top button ─────────────────────────────────────
+  const backTop = document.getElementById('backTop');
+  window.addEventListener('scroll', () => {
+    backTop.classList.toggle('visible', window.scrollY > 400);
+  });
+
+  // ── Mobile hamburger ───────────────────────────────────────
+  const sidebar  = document.getElementById('sidebar');
+  const overlay  = document.getElementById('overlay');
+  const hamburger= document.getElementById('hamburger');
+
+  function openSidebar()  { sidebar.classList.add('open'); overlay.classList.add('open'); }
+  function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('open'); }
+
+  hamburger.addEventListener('click', () =>
+    sidebar.classList.contains('open') ? closeSidebar() : openSidebar()
+  );
+  overlay.addEventListener('click', closeSidebar);
+
+  // Close sidebar on nav link click (mobile)
+  navLinks.forEach(a => a.addEventListener('click', () => {
+    if (window.innerWidth <= 768) closeSidebar();
+  }));
+</script>
+
+</body>
+</html>
