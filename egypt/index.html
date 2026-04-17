@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legacy of the Pharaohs: Ancient Egypt's Golden Ages</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600;700&family=Lato:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-corner header-corner--tl">
+      <span class="ankh">☥</span>
+      <div class="hieroglyph-strip hieroglyph-strip--v"></div>
+    </div>
+    <div class="header-corner header-corner--tr">
+      <span class="scarab">𓆣</span>
+      <div class="hieroglyph-strip hieroglyph-strip--v"></div>
+    </div>
+
+    <div class="header-text">
+      <h1 class="site-title">Legacy of the Pharaohs</h1>
+      <h2 class="site-subtitle">Ancient Egypt's Golden Ages</h2>
+      <p class="site-desc">A balanced historical overview of the key rulers and defining achievements across the Old, Middle, and New Kingdoms.</p>
+    </div>
+
+    <div class="header-corner header-corner--bl">
+      <div class="hieroglyph-strip hieroglyph-strip--v"></div>
+    </div>
+    <div class="header-corner header-corner--br">
+      <div class="hieroglyph-strip hieroglyph-strip--v"></div>
+    </div>
+  </header>
+
+  <!-- ERA FILTER -->
+  <nav class="era-filters" aria-label="Filter by era">
+    <button class="filter-btn active" data-era="all">All Eras</button>
+    <button class="filter-btn" data-era="Old Kingdom">Old Kingdom</button>
+    <button class="filter-btn" data-era="Middle Kingdom">Middle Kingdom</button>
+    <button class="filter-btn" data-era="New Kingdom">New Kingdom</button>
+  </nav>
+
+  <!-- TIMELINE -->
+  <main class="timeline-section">
+    <div class="timeline-wrapper">
+      <div class="timeline-track" id="timeline-track">
+        <!-- Cards injected by main.js -->
+      </div>
+      <div class="timeline-bar" id="timeline-bar">
+        <!-- Era labels injected by main.js -->
+      </div>
+    </div>
+  </main>
+
+  <!-- GLOSSARY -->
+  <footer class="glossary" id="glossary">
+    <div class="glossary-label">
+      <span class="scarab small">𓆣</span>
+      <strong>GLOSSARY</strong>
+    </div>
+    <div class="glossary-items" id="glossary-items">
+      <!-- Injected by main.js -->
+    </div>
+  </footer>
+
+  <!-- MODAL OVERLAY -->
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+    <div class="modal-panel">
+      <button class="modal-close" id="modal-close" aria-label="Close detail panel">&times;</button>
+
+      <div class="modal-header">
+        <span class="modal-emoji" id="modal-emoji"></span>
+        <div class="modal-meta">
+          <span class="modal-era-badge" id="modal-era-badge"></span>
+          <span class="modal-dynasty" id="modal-dynasty"></span>
+          <span class="modal-date" id="modal-date"></span>
+        </div>
+      </div>
+
+      <h2 class="modal-title" id="modal-title"></h2>
+
+      <div class="modal-tags" id="modal-tags"></div>
+
+      <p class="modal-overview" id="modal-overview"></p>
+
+      <div class="modal-achievements">
+        <h3>Key Achievements</h3>
+        <ul id="modal-achievements-list"></ul>
+      </div>
+
+      <div class="modal-legacy">
+        <h3>Historical Legacy</h3>
+        <p id="modal-legacy-text"></p>
+      </div>
+
+      <div class="modal-fact">
+        <span class="fact-label">☥ Did You Know?</span>
+        <p id="modal-fact-text"></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
