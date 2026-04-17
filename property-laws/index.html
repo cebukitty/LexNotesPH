@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Law Interactive Audit - Full Version</title>
+    <style>
+        :root { --primary: #1a2a3a; --accent: #d4af37; --bg: #f8f9fa; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h1 { color: var(--primary); border-left: 5px solid var(--accent); padding-left: 15px; margin-bottom: 5px; }
+        .author { color: #666; margin-bottom: 30px; font-style: italic; font-size: 0.9em; }
+        .controls { display: flex; gap: 15px; margin-bottom: 25px; }
+        input { flex: 1; padding: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--primary); color: white; padding: 15px; text-align: left; position: sticky; top: 0; }
+        td { padding: 15px; border-bottom: 1px solid #eee; vertical-align: top; font-size: 14px; line-height: 1.5; }
+        .law-id { font-weight: bold; color: var(--primary); display: block; font-size: 1.1em; }
+        .status-tag { padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; display: inline-block; margin-top: 5px; }
+        .active { background: #e8f5e9; color: #2e7d32; }
+        .superseded { background: #fff3e0; color: #ef6c00; }
+        .repealed { background: #ffebee; color: #c62828; }
+        .amended { background: #e3f2fd; color: #1565c0; }
+        .link-btn { display: inline-block; margin-top: 10px; padding: 6px 14px; background: #3498db; color: white; text-decoration: none; border-radius: 4px; font-size: 12px; font-weight: 600; }
+        .purpose-box { background: #fdfaf0; border-left: 3px solid #d4af37; padding: 8px 12px; margin-top: 10px; font-size: 13px; color: #555; }
+        .site-footer { text-align: center; padding: 1.2rem 1rem; border-top: 1px solid rgba(0,0,0,0.1); font-size: 0.78rem; color: #888; margin-top: 2rem; }
+        .site-footer a { color: inherit; text-decoration: none; }
+        .site-footer a:hover { color: #555; text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Philippine Property Laws</h1>
+    <div class="author">Compiled by: Atty. Catherine Annabelle L. Hermoso, REB, REA </div>
+    <div class="controls">
+        <input type="text" id="searchInput" placeholder="Search laws, keywords, or purposes...">
+    </div>
+    <table id="propertyTable">
+        <thead><tr><th style="width: 180px;">Law & Date</th><th>Salient Features & Purpose</th><th style="width: 130px;">Status</th></tr></thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+<script>
+    const lawData = [
+        { id: "R.A. 4726", date: "18 June 1966", title: "Condominium Act", features: "Defines condominium unit ownership; 60% Filipino ownership requirement; exclusive unit rights with shared amenities; maintenance lien provisions.", purpose: "Established the legal framework for condominium ownership and administration in the Philippines.", status: "active", link: "https://lawphil.net/statutes/repacts/ra1966/ra_4726_1966.html" },
+        { id: "R.A. 6552", date: "26 Aug 1972", title: "Realty Installment Buyer Act (Maceda Law)", features: "Grace periods and refund rights for residential real estate installment buyers; transfer privileges based on payment tenure.", purpose: "Protects buyers of real estate on installment payments against onerous and oppressive conditions.", status: "active", link: "https://lawphil.net/statutes/repacts/ra1972/ra_6552_1972.html" },
+        { id: "P.D. 856", date: "23 Dec 1975", title: "The Code on Sanitation of the Philippines", features: "DOH enforcement power; Standards for Water Supply, Food Establishments, and refuse disposal systems .", purpose: "Codified sanitation and health laws to promote and protect public health.", status: "active", link: "https://www.officialgazette.gov.ph/1975/12/23/presidential-decree-no-856-s-1975/" },
+        { id: "P.D. 933", date: "13 May 1976", title: "Creating the Human Settlements Commission", features: "Formulate integrated national plans; appellate body for planning conflicts; recommend 'Planned Areas for New Development' .", purpose: "To effect reforms for a secure national community and improved quality of life.", status: "superseded", link: "https://lawphil.net/statutes/presdecs/pd1976/pd_933_1976.html" },
+        { id: "P.D. 953", date: "6 July 1976", title: "Tree Planting Requirements", features: "Mandated 30% open space for subdivisions (exclusive of roads/alleys) and tree planting for riparian owners .", purpose: "Mandated environmental preservation and recreational space in developments.", status: "amended", link: "https://lawphil.net/statutes/presdecs/pd1976/pd_953_1976.html" },
+        { id: "P.D. 957", date: "12 July 1976", title: "Subdivision and Condominium Buyer's Protective Decree", features: "Licensing of developers; performance bonds; title delivery requirements; restricts unauthorized mortgages on sold lots/units.", purpose: "Protects subdivision lot and condominium unit buyers from fraudulent practices by developers.", status: "active", link: "https://lawphil.net/statutes/presdecs/pd1976/pd_957_1976.html" },
+        { id: "P.D. 1216", date: "14 Oct 1977", title: "Defining Open Space in Residential Subdivisions", features: "Redefined 30% area to include roads; defined specific park percentages for High, Medium, and Low-density housing .", purpose: "Established non-alienable status for park lands and redefined space requirements to include amenities.", status: "active", link: "https://lawphil.net/statutes/presdecs/pd1977/pd_1216_1977.html" },
+        { id: "P.D. 1517", date: "11 June 1978", title: "Urban Land Reform in the Philippines", features: "Proclamation of Urban Land Reform Zones based on population density and non-agricultural activity .", purpose: "To renew blighted areas and improve conditions for the urban poor while incentivizing developers.", status: "active", link: "https://lawphil.net/statutes/presdecs/pd1978/pd_1517_1978.html" },
+        { id: "P.D. 1529", date: "11 June 1978", title: "Property Registration Decree", features: "Codified Torrens system registration; judicial proceedings are 'in rem'; established Register of Deeds .", purpose: "Streamlined and simplified registration proceedings to facilitate effective implementation.", status: "amended", link: "https://lawphil.net/statutes/presdecs/pd1978/pd_1529_1978.html" },
+        { id: "P.D. 1586", date: "11 June 1978", title: "Environmental Impact Statement (EIS) System", features: "ECC requirement for environmentally critical projects or areas declared by the President .", purpose: "Required environmental impact assessments to manage developmental ecological effects.", status: "active", link: "https://lawphil.net/statutes/presdecs/pd1978/pd_1586_1978.html" },
+        { id: "E.O. 648", date: "7 Feb 1981", title: "Reorganizing the HSRC", features: "HSRC empowered to set zoning standards and review local land use plans .", purpose: "Reorganized the primary regulatory body for human settlements; later repealed by RA 11201.", status: "repealed", link: "https://www.officialgazette.gov.ph/1981/02/07/executive-order-no-648-s-1981/" },
+        { id: "Proc. 2146", date: "14 Dec 1981", title: "Environmentally Critical Projects/Areas", features: "Detailed list of projects (Heavy Industry, Infrastructure) and areas (Parks, Habitats, Prime Agricultural) subject to EIS.", purpose: "Defined the specific scope for P.D. 1586 ECC requirements.", status: "active", link: "https://www.officialgazette.gov.ph/1981/12/14/proclamation-no-2146-s-1981/" },
+        { id: "B.P. 185", date: "16 March 1982", title: "Balikbayan Law (Land Ownership)", features: "Allowed former citizens to own up to 1,000 sq.m. urban or 1 hectare rural land for residential use .", purpose: "Implemented constitutional provisions for land transfer to natural-born citizens who lost citizenship.", status: "active", link: "https://lawphil.net/statutes/bataspas/bp1982/bp_185_1982.html" },
+        { id: "B.P. 220", date: "25 March 1982", title: "Standards for Economic and Socialized Housing", features: "Set minimum lot areas (72 sq.m. detached) and ceiling heights (2m headroom) .", purpose: "Established relaxed standards to encourage development of affordable housing.", status: "active", link: "https://lawphil.net/statutes/bataspas/bp1982/bp_220_1982.html" },
+        { id: "B.P. 344", date: "25 Feb 1983", title: "Accessibility Law", features: "Required buildings and parking to be accessible to disabled persons; 10% unit requirement for gov housing .", purpose: "Mandated minimum mobility standards for public use buildings and establishments.", status: "active", link: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/2/32306" },
+        { id: "E.O. 90", date: "17 Dec 1986", title: "National Shelter Program Mandates", features: "Created HUDCC; renamed HSRC to HLURB; defined NHA as direct shelter producer .", purpose: "Identified key agencies essential for the National Shelter Program; repealed by RA 11201.", status: "repealed", link: "https://www.officialgazette.gov.ph/1986/12/17/executive-order-no-90-s-1986/" },
+        { id: "R.A. 6657", date: "10 June 1988", title: "CARL of 1988", features: "Redistribution of agricultural lands; 5-hectare retention limit for private owners .", purpose: "Enacted to promote social justice by distributing land to landless farmers.", status: "amended", link: "https://lawphil.net/statutes/repacts/ra1988/ra_6657_1988.html" },
+        { id: "R.A. 7586", date: "22 July 1991", title: "NIPAS Act of 1992", features: "Classification and administration of protected areas to preserve biodiversity and genetic diversity .", purpose: "Aimed to identify and protect important ecosystems from destructive exploitation.", status: "amended", link: "https://lawphil.net/statutes/repacts/ra1992/ra_7586_1992.html" },
+        { id: "R.A. 7279", date: "24 March 1992", title: "Urban Development Housing Act (UDHA)", features: "LGUs identify land for socialized housing; set beneficiary criteria for homeless citizens .", purpose: "Framework for uplifting urban poor through resettlement and housing programs.", status: "active", link: "https://lawphil.net/statutes/repacts/ra1992/ra_7279_1992.html" },
+        { id: "E.O. 71", date: "23 March 1993", title: "Devolving HLURB Powers to LGUs", features: "Cities/municipalities assumed power to approve subdivision schemes and development permits .", purpose: "Decentralized housing regulation functions to local governments.", status: "active", link: "https://lawphil.net/statutes/execords/eo1993/eo_71_1993.html" },
+        { id: "E.O. 72", date: "25 March 1993", title: "CLUP Implementation", features: "Mandated LGUs to formulate land use plans and enact zoning ordinances .", purpose: "Devolved the land use plan initiative from HLURB to LGUs.", status: "active", link: "https://www.officialgazette.gov.ph/1993/03/25/executive-order-no-72-s-1993/" },
+        { id: "E.O. 124", date: "8 Sept 1993", title: "Land Conversion Priorities", features: "Established procedures for conversion in industrial, tourism, and socialized housing areas .", purpose: "Provided a mechanism to identify priority development areas for land conversion.", status: "active", link: "https://lawphil.net/executive/execord/eo1993/eo_124_1993.html" },
+        { id: "E.O. 184", date: "27 June 1994", title: "SHOPCs", features: "Creation of One-Stop Processing Centers to issue permits and licenses within 90 days .", purpose: "Incentivized developers for socialized housing by streamlining regulatory clearances.", status: "active", link: "https://lawphil.net/executive/execord/eo1994/eo_184_1994.html" },
+        { id: "R.A. 8368", date: "27 Oct 1997", title: "Anti-Squatting Law Repeal Act", features: "Repealed P.D. 772 which penalized squatting; decriminalized unlawful occupation of land.", purpose: "Removed criminal liability for squatting, shifting focus to resettlement and housing solutions.", status: "active", link: "https://lawphil.net/statutes/repacts/ra1997/ra_8368_1997.html" },
+        { id: "R.A. 8974", date: "7 Nov 2000", title: "Right-of-Way Acquisition Act", features: "Immediate 100% BIR zonal value payment upon filing expropriation for infrastructure .", purpose: "Enacted to expedite acquisition and payment for national government projects.", status: "superseded", link: "https://lawphil.net/statutes/repacts/ra2000/ra_8974_2000.html" },
+        { id: "R.A. 9003", date: "26 Jan 2001", title: "Ecological Solid Waste Management Act", features: "Mandated waste segregation and recycling; created national/local Solid Waste Boards .", purpose: "Created the framework and institutional agencies for enforced waste management.", status: "active", link: "https://lawphil.net/statutes/repacts/ra2001/ra_9003_2001.html" },
+        { id: "R.A. 9275", date: "22 March 2004", title: "Philippine Clean Water Act", features: "Water Quality Management System; lead oversight by DENR and sewage by DPWH .", purpose: "To streamline procedures for pollution control and protect water resources.", status: "active", link: "https://lawphil.net/statutes/repacts/ra2004/ra_9275_2004.html" },
+        { id: "R.A. 9653", date: "14 July 2009", title: "Rent Control Act of 2009", features: "Caps annual rent increases at 7%; regulates security deposits and advances; protects tenants against arbitrary eviction.", purpose: "Protects low-income residential tenants from unjust rent increases and eviction practices.", status: "active", link: "https://lawphil.net/statutes/repacts/ra2009/ra_9653_2009.html" },
+        { id: "R.A. 9700", date: "7 Aug 2009", title: "Strengthening CARP (CARPER)", features: "Extended target date to 2014; clarified expropriation and ARB compensation rules .", purpose: "Clarified and strengthened provisions while extending the CARP target date.", status: "active", link: "https://lawphil.net/statutes/repacts/ra2009/ra_9700_2009.html" },
+        { id: "R.A. 10023", date: "9 March 2010", title: "Residential Free Patents Act", features: "Authorized titling for actual occupants of unregistered residential lands (200-1,000 sq.m. limits) .", purpose: "Simplified titling for occupants of residential lots via CENRO application.", status: "active", link: "https://lawphil.net/statutes/repacts/ra2010/ra_10023_2010.html" },
+        { id: "DAR A.O. 25 s 2010", date: "4 Oct 2010", title: "Amendment to Free Patent Rules", features: "Requires 10-year continuous possession for residential free patent applications.", purpose: "Clarified and tightened possession requirements for residential free patent titling.", status: "amended", link: "https://www.dar.gov.ph/issuance/administrative-orders" },
+        { id: "DAR A.O. 1 s 2002", date: "28 Feb 2002", title: "Comprehensive Rules on Land Use Conversion", features: "Guidelines for conversion; delineated non-convertible irrigated lands and NIPAS areas .", purpose: "Provided criteria and rules for converting agricultural land to non-agricultural uses.", status: "amended", link: "https://www.dar.gov.ph/issuance/administrative-orders" },
+        { id: "DAR A.O. 2 s 2002", date: "21 May 2002", title: "Institutionalization of CLUPPI", features: "CLUPPI established at national and regional levels to handle conversion, exemption, and exclusion .", purpose: "Served as a one-stop shop for matters regarding land use conversion and CARP.", status: "active", link: "https://www.dar.gov.ph/issuance/administrative-orders" },
+        { id: "R.A. 11201", date: "14 Feb 2019", title: "DHSUD Act", features: "Abolished HLURB/HUDCC; created Department of Human Settlements (DHSUD) and HSAC .", purpose: "Unified housing regulation and policy under one executive department.", status: "active", link: "https://lawphil.net/statutes/repacts/ra2019/ra_11201_2019.html" },
+        { id: "SEC MC 1 s 2020", date: "20 Jan 2020", title: "Revised REIT IRR", features: "Lowered minimum public ownership to 33%; mandated 90% dividend distribution .", purpose: "Addressed restrictive rules to encourage Real Estate Investment Trust adoption.", status: "active", link: "https://documents.pse.com.ph/wp-content/uploads/sites/15/2021/03/2020MCNo01_1.pdf" },
+        { id: "R.A. 12001", date: "13 June 2024", title: "Real Property Valuation and Assessment Reform Act", features: "Standardizes property valuation through a unified Schedule of Market Values (SMV); provides 2-year tax amnesty for arrears.", purpose: "Modernizes the real property valuation system to ensure just, equitable, and uniform property assessment nationwide.", status: "active", link: "https://lawphil.net/statutes/repacts/ra2024/ra_12001_2024.html" },
+        { id: "R.A. 12252", date: "3 Sept 2025", title: "Investors’ Lease Act", features: "Extended foreign lease to straight 99 years; mandatory contract registration .", purpose: "Aims to boost international competitiveness for industrial and tourism projects.", status: "active", link: "https://lawphil.net/statutes/repacts/ra2025/ra_12252_2025.html" },
+        { id: "DAO 2025-35", date: "10 Dec 2025", title: "Revised Free Patents Guidelines", features: "Fixed 120-day processing; electronic filing via LAMS; expanded eligibility for heirs .", purpose: "Crucial component of 2026 reform to resolve land disputes and secure ownership.", status: "active", link: "https://www.pna.gov.ph/articles/1269182" }
+    ];
+
+    function render(filter = "") {
+        const body = document.getElementById('tableBody');
+        body.innerHTML = "";
+        const searchTerm = filter.toLowerCase();
+        lawData.filter(law => law.id.toLowerCase().includes(searchTerm) || law.title.toLowerCase().includes(searchTerm) || law.features.toLowerCase().includes(searchTerm) || law.purpose.toLowerCase().includes(searchTerm))
+        .forEach(law => {
+            const row = `<tr>
+                <td><span class="law-id">${law.id}</span><small>${law.date}</small></td>
+                <td>
+                    <strong>${law.title}</strong>
+                    <p style="margin: 8px 0;">${law.features}</p>
+                    <div class="purpose-box"><strong>Purpose:</strong> ${law.purpose}</div>
+                    ${law.link ? `<a href="${law.link}" target="_blank" class="link-btn">Official Source</a>` : ''}
+                </td>
+                <td><span class="status-tag ${law.status}">${law.status}</span></td>
+            </tr>`;
+            body.innerHTML += row;
+        });
+    }
+    document.getElementById('searchInput').addEventListener('input', (e) => render(e.target.value));
+    render();
+</script>
+<footer class="site-footer"><a href="/">Copyright 2026. LexNotesPH. Atty. Cat Hermoso.</a></footer>
+</body>
+</html>
