@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LexNotesPH — Atty. Cat Hermoso</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* --- DESIGN SYSTEM --- */
+:root {
+  --primary-dark: #060510;
+  --gold: #9a7200;
+  --gold-mid: #c9a227;
+  --gold-light: #e8c84a;
+  --gold-specular: #f5e08a;
+  --text: #2c2418;
+  --text-muted: #6b5d44;
+  --bg: #18140e;
+  --folder-body: #e4d9bc;
+  --folder-tab: #cfc099;
+  --folder-crease: #b8a97a;
+  --font-header: 'Cinzel', serif;
+  --font-body: 'EB Garamond', serif;
+  --transition: all 0.45s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* --- BASE: MAHOGANY DESK SURFACE --- */
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  align-items: center;
+  position: relative;
+}
+
+/* Wood grain simulation: subtle angled lines */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    repeating-linear-gradient(
+      89deg,
+      transparent 0px,
+      transparent 58px,
+      rgba(0,0,0,0.06) 58px,
+      rgba(0,0,0,0.06) 59px,
+      transparent 59px,
+      transparent 110px,
+      rgba(255,255,255,0.015) 110px,
+      rgba(255,255,255,0.015) 111px
+    ),
+    repeating-linear-gradient(
+      91deg,
+      transparent 0px,
+      transparent 140px,
+      rgba(0,0,0,0.04) 140px,
+      rgba(0,0,0,0.04) 141px
+    );
+}
+
+/* Spotlight vignette — light source from above center */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 20%,
+    rgba(60,45,20,0.0) 0%,
+    rgba(0,0,0,0.55) 80%,
+    rgba(0,0,0,0.85) 100%
+  );
+}
+
+main {
+  padding: 5rem 24px 7rem;
+  width: 100%;
+  max-width: 1200px;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- HEADER: LIBRARY PHOTO + GOLD SEAL --- */
+header {
+  text-align: center;
+  width: 100%;
+  padding: 7rem 2rem 5.5rem;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Real photo layer */
+header .header-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1920&q=80')
+    center / cover no-repeat;
+  z-index: 0;
+}
+
+/* Cinematic dark overlay with warm low-light tint */
+header .header-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(4,3,18,0.60) 0%,
+      rgba(6,5,16,0.78) 60%,
+      rgba(8,6,14,0.92) 100%
+    );
+}
+
+header .header-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Beveled gold rule at bottom of header */
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 2;
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--gold) 10%,
+    var(--gold-mid) 30%,
+    var(--gold-specular) 50%,
+    var(--gold-mid) 70%,
+    var(--gold) 90%,
+    transparent 100%
+  );
+  box-shadow:
+    0 -1px 0 rgba(0,0,0,0.6),
+    0 2px 10px rgba(200,162,39,0.25);
+}
+
+/* Metallic foil title */
+header h1 {
+  font-family: var(--font-header);
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.15em;
+  background: linear-gradient(
+    160deg,
+    var(--gold-specular)  0%,
+    var(--gold-light)     25%,
+    var(--gold-mid)       45%,
+    var(--gold)           65%,
+    #6b4e00               85%,
+    var(--gold-mid)       100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Debossed shadow pair */
+  filter:
+    drop-shadow(0 3px 8px rgba(0,0,0,0.9))
+    drop-shadow(0 -1px 0 rgba(255,220,80,0.15));
+}
+
+header p {
+  color: #bdb090;
+  font-style: italic;
+  font-size: 1.1rem;
+  max-width: 560px;
+  margin: 0 auto;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+
+.ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 1rem auto;
+}
+
+.ornament::before, .ornament::after {
+  content: '';
+  display: block;
+  width: 110px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold-mid), transparent);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.4);
+}
+
+.ornament span {
+  font-size: 0.62rem;
+  letter-spacing: 0.45em;
+  color: var(--gold-mid);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+/* --- GRID --- */
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 3rem 2.5rem;
+  /* Padding-top gives space for the folder tabs */
+  padding-top: 1.8rem;
+}
+
+/* --- FOLDER CARDS --- */
+.card {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.8rem 2rem 2.4rem;
+  position: relative;
+  transition: var(--transition);
+  border-radius: 0 5px 5px 5px;
+
+  /* Manila folder body color with a warm gradient for paper curl */
+  background:
+    linear-gradient(
+      170deg,
+      rgba(255,255,255,0.22) 0%,
+      rgba(255,255,255,0.06) 40%,
+      transparent 70%
+    ),
+    /* Paper grain noise via inline SVG data URI */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, var(--folder-body) 0%, #d8cca8 100%);
+
+  /* Multi-layer shadow: ambient + key light from upper-left + long cast shadow on desk */
+  box-shadow:
+    inset 0  1px 0   rgba(255,255,255,0.55),
+    inset 0 -1px 0   rgba(0,0,0,0.08),
+    inset 1px 0 0    rgba(255,255,255,0.2),
+    inset -1px 0 0   rgba(0,0,0,0.05),
+    0  1px  2px rgba(0,0,0,0.18),
+    0  4px  8px rgba(0,0,0,0.22),
+    0 14px 28px rgba(0,0,0,0.30),
+    0 30px 55px rgba(0,0,0,0.22),
+    0 50px 80px rgba(0,0,0,0.12);
+}
+
+/* Folder tab */
+.card::before {
+  content: '';
+  position: absolute;
+  top: -24px;
+  left: 0;
+  width: 36%;
+  height: 24px;
+  border-radius: 5px 5px 0 0;
+  background: linear-gradient(
+    to bottom,
+    #d8cc9e 0%,
+    var(--folder-tab) 100%
+  );
+  box-shadow:
+    0 -3px 6px rgba(0,0,0,0.20),
+    inset 0 1px 0 rgba(255,255,255,0.5),
+    inset 0 -1px 0 rgba(0,0,0,0.06);
+}
+
+/* Fold crease line at top of card body */
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    rgba(0,0,0,0.14),
+    rgba(0,0,0,0.06) 50%,
+    rgba(0,0,0,0.14)
+  );
+  border-radius: 5px 5px 0 0;
+}
+
+.card:hover {
+  transform: translateY(-14px) rotate(-0.6deg);
+  box-shadow:
+    inset 0  1px 0   rgba(255,255,255,0.55),
+    inset 0 -1px 0   rgba(0,0,0,0.08),
+    0  2px  4px rgba(0,0,0,0.18),
+    0  8px 18px rgba(0,0,0,0.25),
+    0 24px 50px rgba(0,0,0,0.32),
+    0 48px 80px rgba(0,0,0,0.22),
+    0 70px 100px rgba(0,0,0,0.12);
+}
+
+/* --- ENGRAVED ICONS --- */
+.icon {
+  font-size: 2.6rem;
+  display: block;
+  margin-bottom: 1.2rem;
+  line-height: 1;
+  font-style: normal;
+  color: #7a6432;
+  /* Engraved: pressed into paper */
+  text-shadow:
+     1px  1px 1px rgba(255,255,255,0.75),
+    -1px -1px 2px rgba(0,0,0,0.30),
+     0px  2px 3px rgba(0,0,0,0.15);
+  filter: none;
+  transition: var(--transition);
+  user-select: none;
+}
+
+.card:hover .icon {
+  color: #5c4820;
+  text-shadow:
+     2px  2px 2px rgba(255,255,255,0.65),
+    -1px -1px 3px rgba(0,0,0,0.40),
+     0px  3px 5px rgba(0,0,0,0.20);
+  transform: scale(1.08);
+}
+
+/* --- CARD LABELS --- */
+.card h2 {
+  font-family: var(--font-header);
+  font-size: 1.05rem;
+  margin-bottom: 0;
+  color: #3a2d18;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  /* Subtle embossed heading */
+  text-shadow:
+     0  1px 0 rgba(255,255,255,0.65),
+     0 -1px 0 rgba(0,0,0,0.08);
+}
+
+.card-divider {
+  width: 36px;
+  height: 1px;
+  margin: 0.8rem auto;
+  background: linear-gradient(to right, transparent, #b09060, transparent);
+}
+
+.card p {
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* --- FOOTER --- */
+footer {
+  margin-top: auto;
+  text-align: center;
+  padding: 3rem 2rem;
+  width: 100%;
+  color: #6a5e48;
+  border-top: 1px solid rgba(160,120,0,0.15);
+  background: rgba(0,0,0,0.35);
+  position: relative;
+  z-index: 1;
+  font-size: 0.9rem;
+}
+
+/* --- RESPONSIVE --- */
+
+/* Tablet */
+@media (max-width: 900px) {
+  .hub-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+    gap: 2.5rem 1.8rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  header { padding: 4rem 1.2rem 3.5rem; }
+
+  /* Fix 1: Lighten overlay so photo shows through on short mobile header */
+  header .header-bg::after {
+    background: linear-gradient(
+      to bottom,
+      rgba(4,3,18,0.45) 0%,
+      rgba(6,5,16,0.60) 60%,
+      rgba(8,6,14,0.72) 100%
+    );
+  }
+  .ornament::before, .ornament::after { width: 48px; }
+
+  .hub-grid {
+    /* Single column on most phones */
+    grid-template-columns: 1fr;
+    gap: 2.2rem;
+    padding-top: 1.6rem;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .card {
+    padding: 2.2rem 1.5rem 2rem;
+    border-radius: 0 4px 4px 4px;
+  }
+
+  .card::before {
+    width: 42%;
+    height: 20px;
+    top: -20px;
+  }
+
+  .icon { font-size: 2.2rem; }
+  .card h2 { font-size: 0.95rem; letter-spacing: 0.18em; }
+  .card p { font-size: 0.95rem; }
+}
+
+/* Fix 2: Dark mode OS + mobile — brighten photo and fix dark brown title */
+@media (prefers-color-scheme: dark) and (max-width: 768px) {
+  header .header-bg {
+    filter: brightness(1.25);
+  }
+
+  /* Replace dark-bottomed gradient with a fully luminous gold — removes the muddy #6b4e00 stop */
+  header h1 {
+    background: linear-gradient(
+      160deg,
+      #fff5c0           0%,
+      var(--gold-specular) 20%,
+      var(--gold-light)    45%,
+      var(--gold-mid)      70%,
+      var(--gold-light)   100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter:
+      drop-shadow(0 2px 8px rgba(0,0,0,0.95))
+      drop-shadow(0 -1px 0 rgba(255,230,100,0.35));
+  }
+}
+
+/* Small phones */
+@media (max-width: 420px) {
+  main { padding: 4rem 14px 5rem; }
+  header p { font-size: 0.98rem; }
+
+  .hub-grid { gap: 2rem; }
+
+  .card {
+    padding: 2rem 1.2rem 1.8rem;
+    /* Reduce long cast shadow on small screens for performance */
+    box-shadow:
+      inset 0  1px 0   rgba(255,255,255,0.55),
+      inset 0 -1px 0   rgba(0,0,0,0.08),
+      0  1px  2px rgba(0,0,0,0.18),
+      0  6px 14px rgba(0,0,0,0.25),
+      0 18px 36px rgba(0,0,0,0.28);
+  }
+}
+
+/* Touch devices — swap hover lift for active press */
+@media (hover: none) {
+  .card:hover {
+    transform: none;
+    box-shadow:
+      inset 0  1px 0   rgba(255,255,255,0.55),
+      inset 0 -1px 0   rgba(0,0,0,0.08),
+      0  1px  2px rgba(0,0,0,0.18),
+      0  4px  8px rgba(0,0,0,0.22),
+      0 14px 28px rgba(0,0,0,0.30),
+      0 30px 55px rgba(0,0,0,0.22),
+      0 50px 80px rgba(0,0,0,0.12);
+  }
+
+  .card:active {
+    transform: scale(0.97);
+    box-shadow:
+      inset 0  1px 0   rgba(255,255,255,0.45),
+      0  1px  3px rgba(0,0,0,0.3),
+      0  6px 14px rgba(0,0,0,0.28);
+    transition: all 0.15s ease;
+  }
+
+  .card:hover .icon { transform: none; }
+  .card:hover .icon { filter: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-bg"></div>
+  <div class="header-content">
+    <h1>LexNotesPH</h1>
+    <div class="ornament">
+      <span>EST. 2026</span>
+    </div>
+    <p>The Digital Library of Atty. Cat Hermoso, JD, REB, REA</p>
+  </div>
+</header>
+
+<main>
+  <div class="hub-grid">
+
+    <a href="/bar-review/" class="card">
+      <div class="icon">⚖</div>
+      <h2>Bar Review</h2>
+      <div class="card-divider"></div>
+      <p>Interactive Bar Q&A specifically designed for Philippine law students.</p>
+    </a>
+
+    <a href="/landmark-cases/" class="card">
+      <div class="icon">⛫</div>
+      <h2>Landmark Cases</h2>
+      <div class="card-divider"></div>
+      <p>A curated index of recent pivotal Property Law decisions (2020–2025).</p>
+    </a>
+
+    <a href="/property-laws/" class="card">
+      <div class="icon">§</div>
+      <h2>Property Laws</h2>
+      <div class="card-divider"></div>
+      <p>Essential property legislation and statutory regulations (1966–2026).</p>
+    </a>
+
+    <a href="/open-space/" class="card">
+      <div class="icon">❧</div>
+      <h2>Open Spaces</h2>
+      <div class="card-divider"></div>
+      <p>Legal standards for mandatory open space requirements (P.D. 957/1216).</p>
+    </a>
+
+    <a href="/poetry/" class="card">
+      <div class="icon">✒</div>
+      <h2>Poetry</h2>
+      <div class="card-divider"></div>
+      <p>A collection of verse, essays, and creative legal explorations.</p>
+    </a>
+
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2026 LexNotesPH. All Rights Reserved. <a href="/epstein-files/index.html" style="opacity: 0.9; text-decoration: none; transition: all 0.3s ease; display: inline-block; font-size: 1.1rem; margin-left: 0.4em; color: var(--gold-mid);" onmouseover="this.style.opacity='1'; this.style.transform='scale(1.2)';" onmouseout="this.style.opacity='0.9'; this.style.transform='scale(1)';" title="Fiat justitia ruat caelum">⚔</a><br>
+  <span style="opacity: 0.6;">Educational Resource &amp; Legal Archive</span></p>
+</footer>
+
+</body>
+</html>
