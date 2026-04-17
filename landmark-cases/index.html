@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property Law Landmark Cases (2020-2025) — LexNotesPH</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* Simplified Artsy Style */
+:root { --navy: #1e1b4b; --gold: #b28900; --parchment: #f4f1ea; }
+body { background-color: var(--parchment); font-family: 'EB Garamond', serif; padding: 40px 20px; color: #2c2c2c; }
+.container { max-width: 800px; margin: auto; }
+.page-title { font-family: 'Cinzel', serif; text-align: center; color: var(--navy); margin-bottom: 40px; }
+.case-card { background: white; border: 1px solid #e2ddd3; padding: 25px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+.subject-tag { font-family: 'Cinzel', serif; color: var(--gold); font-size: 0.7rem; letter-spacing: 1px; }
+.case-title { font-family: 'Cinzel', serif; font-size: 1.2rem; color: var(--navy); margin: 5px 0; }
+.sc-button { display: inline-block; background: var(--navy); color: white; padding: 8px 15px; text-decoration: none; font-size: 0.8rem; margin-top: 15px; }
+.filter-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
+.filter-btn { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 1px; padding: 6px 14px; border: 1px solid var(--navy); background: transparent; color: var(--navy); cursor: pointer; transition: background 0.2s, color 0.2s; }
+.filter-btn:hover { background: var(--navy); color: white; }
+.filter-btn.active { background: var(--navy); color: white; }
+.filter-btn.all-btn.active { background: var(--gold); border-color: var(--gold); color: white; }
+.site-footer { text-align: center; padding: 1.2rem 1rem; border-top: 1px solid rgba(0,0,0,0.1); font-size: 0.78rem; color: #888; margin-top: 2rem; }
+.site-footer a { color: inherit; text-decoration: none; }
+.site-footer a:hover { color: #555; text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1 class="page-title">Property Law Landmark Cases (2020-2025)</h1>
+  <div class="filter-bar" id="filter-bar"></div>
+  <div id="case-container"></div>
+</div>
+
+<script>
+const landmarkCases = [
+  // ── 2020 ──
+  { s: "Foot Path", t: "Spouses Castro v. Spouses Esperanza", c: "G.R. No. 248763 (March 2020)", d: "A separately titled 'Foot Path' retains its nature as a passageway and cannot be blocked by adjacent lot owners. Property owners cannot obstruct access to an existing foot path that serves as outlet to a public highway for neighboring lots.", l: "https://lawphil.net/judjuris/juri2020/mar2020/gr_248763_2020.html" },
+  { s: "Void Contracts", t: "Gatmaytan v. Misibis Land, Inc.", c: "G.R. No. 222166 (June 10, 2020)", d: "An action for reconveyance based on a void contract is imprescriptible. When consent is totally absent (not merely vitiated), the contract is void and registration does not vest title. An action to recover wrongfully registered land is imprescriptible as long as it remains in the name of the person who caused the registration.", l: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/1/66314" },
+  { s: "Possession", t: "Reyes v. Manalo", c: "G.R. No. 237201 (September 22, 2020)", d: "Accion publiciana is the plenary action to recover possession filed in the RTC when dispossession exceeded one year. Unlike forcible entry, proof of prior physical possession is not required. The core issue is who has the better right of possession, not prior possession.", l: "https://lawphil.net/judjuris/juri2020/sep2020/gr_237201_2020.html" },
+  // ── 2021 ──
+  { s: "Detainer", t: "Sarmiento v. Dizon", c: "G.R. No. 235424 (February 2021)", d: "Unlawful detainer requires proof that the defendant's possession was initially by the plaintiff's tolerance. Hearsay testimony cannot establish tolerance. The proper remedy when tolerance is not proven is accion publiciana or reivindicatoria, not unlawful detainer.", l: "https://lawphil.net/judjuris/juri2021/feb2021/gr_235424_2021.html" },
+  { s: "Possessory Remedies", t: "Spouses Tobias v. Gonzales", c: "G.R. No. 232176 (February 17, 2021)", d: "A holder of a Torrens Title has the better right to possession but cannot simply wrest possession — they must resort to the proper judicial remedy. The case distinguishes forcible entry, unlawful detainer, and accion publiciana with their respective jurisdictional requirements.", l: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/1/67291" },
+  { s: "Rescission", t: "Heirs of Kim v. Quicho", c: "G.R. No. 249247 (March 15, 2021)", d: "Upon rescission under Article 1191, forfeiture clauses remain valid and partial payments may be retained as rentals if the buyer used the property. Earnest money compensates the seller for opportunity cost and may be forfeited absent a clear agreement to the contrary.", l: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/1/67339" },
+  { s: "Easements", t: "Spouses Fernandez v. Spouses Delfin", c: "G.R. No. 227917 (March 17, 2021)", d: "When one owner establishes an apparent sign of easement between two properties they own, this serves as title to the easement upon alienation of either property (Article 624). Annotation on title is not required for easement validity. Successors are bound by apparent easements if no contrary stipulation was made at the time of transfer.", l: "https://lawphil.net/judjuris/juri2021/mar2021/gr_227917_2021.html" },
+  { s: "HOA Liens", t: "Spouses Abayon v. Ferndale Homes HOA", c: "G.R. No. 230476 (April 2021)", d: "New property owners assume liens for unpaid association dues that accrued before their acquisition. Unpaid assessments constitute liens on the property under subdivision deed restrictions, binding successors-in-interest. Excessive interest rates (24%) and penalties (8%) were reduced to 12% and 6% respectively.", l: "https://lawphil.net/judjuris/juri2021/apr2021/gr_230426_2021.html" },
+  { s: "Imprescriptibility", t: "Heirs of Ebancuel v. Respondents", c: "G.R. No. 214540 (July 28, 2021)", d: "A registered owner's right to recover possession is imprescriptible. Laches does not bar recovery of registered land under the Torrens system. The question of laches requires proof that the delay was unreasonable and that the claimant abandoned their right — mere passage of time is insufficient.", l: "https://elibrary.judiciary.gov.ph/thebookshelf/showdocs/17/67941" },
+  // ── 2022 ──
+  { s: "Land Reg", t: "Republic v. Pasig Rizal Co., Inc.", c: "G.R. No. 213207 (February 15, 2022)", d: "RA 11573 retroactively applies to pending land registration cases. A DENR geodetic engineer's certification is now sufficient proof that land is alienable and disposable, simplifying requirements from previous jurisprudence (Republic v. T.A.N. Properties).", l: "https://lawphil.net/judjuris/juri2022/feb2022/gr_213207_2022.html" },
+  { s: "Co-ownership", t: "Reyes v. Spouses Garcia", c: "G.R. No. 225159 (March 2022)", d: "A co-owner may sell their pro indiviso share without the consent of other co-owners, but cannot transfer the shares of others. The sale affects only the seller's undivided share. The proper remedy is partition, not nullification of the sale or recovery of ownership. The nemo dat quod non habet principle applies.", l: "https://lawphil.net/judjuris/juri2022/mar2022/gr_225159_2022.html" },
+  { s: "Tax Exemption", t: "LRTA v. City of Pasay", c: "G.R. No. 211299 (June 2022)", d: "LRTA, as a government instrumentality (not a GOCC), is exempt from real property taxes. Properties devoted to public use are properties of public dominion owned by the State and cannot be taxed by local governments unless beneficial use is granted to taxable persons.", l: "https://lawphil.net/judjuris/juri2022/jun2022/gr_211299_2022.html" },
+  { s: "Prescription", t: "Lorenzo v. Heirs of Eustaquio", c: "G.R. No. 209435 (August 10, 2022)", d: "Further clarification on prescription rules applicable to registered land under the Torrens system and acquisition by adverse possession.", l: "https://lawphil.net/judjuris/juri2022/aug2022/gr_209435_2022.html" },
+  // ── 2023 ──
+  { s: "Good Faith", t: "Republic v. Chua (substituted by Heirs)", c: "G.R. No. 253305 (August 2, 2023)", d: "A buyer is not in good faith when the property seller is not in possession and numerous houses exist on the property. A buyer must exercise due diligence beyond the four corners of the title when red flags exist. Property forfeited to the government prevails over subsequent fraudulent transfers.", l: "https://lawphil.net/judjuris/juri2023/aug2023/gr_253305_2023.html" },
+  { s: "Land Reg", t: "Republic v. Spouses Tan", c: "G.R. No. 232778 (August 23, 2023)", d: "Under RA 11573, 20 years of possession (instead of since June 12, 1945) is now sufficient for land registration. A DENR geodetic engineer certification with proper references is sufficient proof of alienable and disposable status. Case remanded for reception of evidence under the new law.", l: "https://lawphil.net/judjuris/juri2023/aug2023/gr_232778_2023.html" },
+  // ── 2024 ──
+  { s: "Arbitration", t: "BCDA v. CJH Development Corporation", c: "G.R. Nos. 219421 & 241772 (April 3, 2024)", d: "State policy strongly favors arbitration. Courts may only intervene in arbitral proceedings under specific, limited exceptions set by law. An arbitral award ordering vacation of leased real property must be enforced; the Court of Appeals cannot modify or suspend it without clear legal basis.", f: "BCDA leased 247 hectares of the John Hay Special Economic Zone to CJH DevCo. Disputes over lease obligations led to arbitration before the PDRCI, which ordered mutual rescission: CJH DevCo to return the leased property (with all improvements), and BCDA to refund PHP 1.42 billion in rent. CJH DevCo refused to vacate and obtained CA rulings nullifying the writ of execution. The SC En Banc reversed the CA, upheld the arbitral award, and reinstated the writ of execution and notice to vacate.", l: "https://sc.judiciary.gov.ph/sc-upholds-arbitral-ruling-ordering-cjh-devt-corp-to-vacate-john-hay-special-economic-zone/" },
+  { s: "Forcible Entry", t: "Rico v. Castillo", c: "G.R. No. 215166 (July 23, 2024)", d: "In forcible entry cases, the sole issue is who had prior physical possession — not who holds title or who owns the property. Questions of ownership may only be provisionally addressed if necessary to determine the better right of possession, but the merits of title must be litigated separately.", f: "Rico had a pending free patent application over a lot in Barangay Matina, Davao City, and was in prior possession. Respondents Castillo et al. destroyed a steel gate and demolished structures to forcibly enter the property. The SC sustained Rico's prior possession and reiterated that courts may not rule on ownership in ejectment suits.", l: "https://sc.judiciary.gov.ph/215166-edgar-m-rico-vs-ernie-toto-castillo-pifiano-jumo-gerry-villegas-alfrance-alica/" },
+  { s: "Foreclosure", t: "Cruz v. Metropolitan Bank and Trust Co.", c: "G.R. No. 236605 (July 29, 2024)", d: "Banks owe borrowers extraordinary diligence and a fiduciary duty of full accounting. Foreclosure is void if the bank proceeds without a definitive finding of default — particularly when the borrower's actual loan balance is disputed and unresolved.", f: "Borrowers Cruz and Low Tay paid PHP 32.6 million but Metrobank only credited PHP 20.5 million. While the accounting case was pending, Metrobank foreclosed the property. The SC nullified the foreclosure: without a categorical finding of default, there was no valid basis to foreclose. Banks must provide a full accounting before declaring default.", l: "https://sc.judiciary.gov.ph/236605-carmelita-c-cruz-and-vilma-low-tay-et-al-vs-metropolitan-bank-and-trust-company-et-al/" },
+  { s: "Pactum Commissorium", t: "Ruby Shelter Builders v. Tan", c: "G.R. No. 217368 (August 5, 2024)", d: "Pactum commissorium (prohibited automatic appropriation of mortgaged property) applies only to clauses embedded in the mortgage deed itself. A borrower's voluntary dacion en pago — a separate post-default agreement to sell collateral as payment — is a legitimate and valid transaction, not pactum commissorium.", f: "Ruby Shelter borrowed PHP 95 million secured by a real estate mortgage over five properties. When it could not repay, the parties signed an MOA under which Ruby Shelter voluntarily executed deeds of absolute sale as dation in payment, receiving PHP 5 million in exchange. Ruby Shelter later challenged this as pactum commissorium. The SC upheld the transfer: Article 2088 targets automatic forfeiture clauses in the mortgage deed itself, not subsequent voluntary agreements.", l: "https://sc.judiciary.gov.ph/217368-ruby-shelter-builders-and-realty-development-corporation-vs-romeo-y-tan-et-al/" },
+  { s: "HOA Foreclosure", t: "Goldland Tower Condo Corp. v. Lim", c: "G.R. No. 268143 (August 12, 2024)", d: "Extrajudicial demand is NOT a prerequisite to judicial foreclosure under Article 1169 of the Civil Code, unless expressly required by law or stipulated in the agreement. Annotation of a lien on a certificate of title is constructive notice of the debt, but not a demand for payment.", f: "Goldland's lien for PHP 4.6 million in unpaid association dues was annotated on a condominium unit's title. After the unit was acquired by Lim at a tax auction, Goldland filed for judicial foreclosure. The SC reinstated the RTC ruling: Article 1169 requires a demand (judicial or extrajudicial) before delay runs — it does not mandate extrajudicial demand before filing suit. The filing of the judicial foreclosure itself constituted the required demand.", l: "https://sc.judiciary.gov.ph/268143-2/" },
+  { s: "Good Faith", t: "Spouses Manalese v. Estate of Spouses Ferreras", c: "G.R. No. 254046 (November 25, 2024)", d: "A buyer is not in good faith when they ignore suspicious facts that should have prompted further inquiry. Relying solely on a clean certificate of title is insufficient — buyers must also verify the full records in the Registry of Deeds. A forged deed of sale is void ab initio and transfers no rights to any subsequent buyer.", f: "Spouses Manalese purchased two properties from a fraudulent seller who obtained titles through a forged deed of sale purportedly signed by persons already deceased. The SC affirmed they were buyers in bad faith: the deed was signed by persons already dead, and the resale price was over ten times the purchase price. A forged deed is void ab initio and transfers no rights to any subsequent buyer.", l: "https://sc.judiciary.gov.ph/254046-spouses-orencio-s-manalese-and-eloisa-b-manalese-and-aries-b-manalese-vs-the-estate-of-the-late-spouses-narciso-and-ofelia-ferreras-represented-by-its-special-administrator-danilo-s-fer/" },
+  // ── 2025 ──
+  { s: "Public Nuisance", t: "Spouses Calimlim v. Goño", c: "G.R. No. 272053 (January 14, 2025)", d: "Unauthorized structures (videoke machines, sari-sari stores, billiard tables, carinderias) built without government authority on foreshore/public land constitute public nuisances per se. They obstruct the free public use of such land and are subject to demolition. DENR denial of a foreshore lease application confirms the occupants' lack of legal authority.", l: "https://sc.judiciary.gov.ph/272053-spouses-pablo-calimlim-and-patnubay-isla-calimlim-represented-by-bienvenido-i-calimlim-and-roberto-b-cabral-vs-efren-g-gono-and-rafaelita-r-gono/" },
+  { s: "Statute of Frauds", t: "Ocampo v. Batara-Sapad", c: "G.R. No. 256343 (April 2, 2025)", d: "An oral sale of real property, while generally unenforceable under the Statute of Frauds, becomes valid and binding if it has been partially or fully executed (e.g., delivery of possession, payment of purchase price). Payments made to an unauthorized person after the seller's death, however, are void as to the heirs.", l: "https://sc.judiciary.gov.ph/256343-benedicto-batara-ocampo-and-daisy-garcia-ocampo-vs-noblesa-batara-sapad-and-ernesto-c-batara/" },
+  { s: "Open Spaces", t: "Quezon City Government v. Madrid", c: "G.R. No. 268254 (April 2, 2025)", d: "Subdivision open spaces and road lots do not automatically become public property upon approval of a subdivision plan. An ordinance cannot compel a donation — this constitutes an illegal taking. A positive act of conveyance (a written deed of donation duly accepted) is required for ownership to pass from a developer to a local government unit.", l: "https://sc.judiciary.gov.ph/268254-quezon-city-government-vs-rainier-l-madrid/" },
+  { s: "Ejectment", t: "Dep't of Education v. Caleda", c: "G.R. No. 272507 (April 21, 2025)", d: "A public institution cannot resist eviction from private property simply because the land is devoted to public use. A public institution may only resist eviction when the owner acquiesces — for example, by unreasonably delaying assertion of rights. The ruling is without prejudice to a separate expropriation proceeding.", l: "https://sc.judiciary.gov.ph/272507-department-of-education-represented-by-dr-estela-carino-in-her-capacity-as-oic-regional-director-of-region-ii-vs-princess-joama-marcosa-a-caleda/" },
+  { s: "Possessory Remedies", t: "Spouses Agullo v. Victa-Espinosa", c: "G.R. No. 269921 (April 22, 2025)", d: "An accion publiciana may be filed not only after one year from dispossession, but also within one year if the dispossession did not involve force, intimidation, threat, strategy, or stealth. An accion reivindicatoria seeks both ownership and possession. Courts may not dismiss such complaints motu proprio on the ground of prematurity.", l: "https://sc.judiciary.gov.ph/269921-spouses-noel-m-agullo-and-leny-agullo-and-josephine-bermejo-vs-lea-victa-espinosa-represented-by-aurora-a-victa/" },
+  { s: "Expropriation", t: "City of Pasay v. Arellano University", c: "G.R. No. 260038 (May 7, 2025)", d: "Just compensation in expropriation cases must be determined based on all relevant factors — not merely the market value as assessed by local government units. LGU tax valuations are uniform and do not account for individual property differences. Courts must conduct an independent valuation considering the property's actual nature, use, and circumstances at the time of taking.", l: "https://sc.judiciary.gov.ph/260038-city-government-of-pasay-vs-arellano-university/" }
+];
+
+const selectedCategories = new Set();
+
+function renderFilters() {
+  const bar = document.getElementById('filter-bar');
+  const categories = [...new Set(landmarkCases.map(c => c.s))];
+  bar.innerHTML = `<button class="filter-btn all-btn ${selectedCategories.size === 0 ? 'active' : ''}" data-cat="__all__">All</button>` +
+    categories.map(cat => `<button class="filter-btn ${selectedCategories.has(cat) ? 'active' : ''}" data-cat="${cat}">${cat}</button>`).join('');
+  bar.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.cat;
+      if (cat === '__all__') {
+        selectedCategories.clear();
+      } else {
+        if (selectedCategories.has(cat)) selectedCategories.delete(cat);
+        else selectedCategories.add(cat);
+      }
+      renderFilters();
+      render();
+    });
+  });
+}
+
+function render() {
+  const container = document.getElementById('case-container');
+  const visible = selectedCategories.size === 0
+    ? landmarkCases
+    : landmarkCases.filter(c => selectedCategories.has(c.s));
+  container.innerHTML = visible.map(c => `
+    <div class="case-card">
+      <span class="subject-tag">${c.s}</span>
+      <h2 class="case-title">${c.t}</h2>
+      <p style="font-style:italic; font-size:0.9rem;">${c.c}</p>
+      <p>${c.d}</p>
+      ${c.f ? `<p style="font-size:0.85rem; color:#5a5550; margin-top:10px; padding-left:12px; border-left:2px solid #e2ddd3;"><em>${c.f}</em></p>` : ''}
+      <a href="${c.l}" target="_blank" class="sc-button">Read Full Decision ↗</a>
+    </div>
+  `).join('');
+}
+
+document.addEventListener('DOMContentLoaded', () => { renderFilters(); render(); });
+</script>
+<footer class="site-footer"><a href="/">Copyright 2026. LexNotesPH. Atty. Cat Hermoso.</a></footer>
+</body>
+</html>
