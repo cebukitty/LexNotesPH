@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Philippine Open Space Law — Research Dashboard</title>
+<script async src="https://cse.google.com/cse.js?cx=35ce5b0ea8f81460f"></script>
+<style>
+  :root {
+    --navy: #1a2744;
+    --navy-light: #243460;
+    --gold: #c9a84c;
+    --gold-light: #f0d080;
+    --cream: #faf8f3;
+    --white: #ffffff;
+    --text: #1e2530;
+    --text-muted: #6b7280;
+    --border: #e5e0d6;
+    --tag-bg: #eef2ff;
+    --tag-text: #3730a3;
+    --green: #166534;
+    --green-bg: #dcfce7;
+    --red: #991b1b;
+    --red-bg: #fee2e2;
+    --amber: #92400e;
+    --amber-bg: #fef3c7;
+    --blue: #1e40af;
+    --blue-bg: #dbeafe;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Georgia', serif; background: var(--cream); color: var(--text); display: flex; height: 100vh; overflow: hidden; }
+
+  /* SIDEBAR */
+  #sidebar {
+    width: 240px; min-width: 240px; background: var(--navy); color: #cdd5e0;
+    display: flex; flex-direction: column; overflow-y: auto;
+  }
+  #sidebar-header { padding: 20px 16px 14px; border-bottom: 1px solid rgba(255,255,255,.1); }
+  #sidebar-header h1 { font-size: 13px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; font-family: 'Georgia', serif; }
+  #sidebar-header p { font-size: 10px; color: #8899bb; margin-top: 3px; font-style: italic; }
+  .nav-section { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.07); }
+  .nav-label { padding: 4px 16px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #667; }
+  .nav-item { display: flex; align-items: center; gap: 8px; padding: 7px 16px; cursor: pointer; font-size: 13px; color: #aabbd0; transition: all .15s; border-left: 3px solid transparent; }
+  .nav-item:hover { background: rgba(255,255,255,.06); color: #fff; }
+  .nav-item.active { background: rgba(201,168,76,.15); color: var(--gold); border-left-color: var(--gold); }
+  .nav-item .nav-icon { font-size: 15px; width: 20px; text-align: center; }
+  .nav-count { margin-left: auto; background: rgba(255,255,255,.1); padding: 1px 6px; border-radius: 10px; font-size: 10px; font-family: 'Georgia', serif; }
+  #topic-filters { padding: 10px 12px; }
+  #topic-filters .filter-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #667; margin-bottom: 6px; }
+  .topic-chip { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 11px; cursor: pointer; margin: 2px; background: rgba(255,255,255,.08); color: #99aabb; border: 1px solid rgba(255,255,255,.1); transition: all .15s; }
+  .topic-chip:hover, .topic-chip.active { background: rgba(201,168,76,.25); color: var(--gold-light); border-color: var(--gold); }
+
+  /* MAIN */
+  #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  #topbar { background: var(--white); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center; gap: 12px; }
+  #search-wrap { position: relative; flex: 1; max-width: 480px; }
+  #search { width: 100%; padding: 8px 12px 8px 36px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; font-family: 'Georgia', serif; background: var(--cream); color: var(--text); outline: none; transition: border .15s; }
+  #search:focus { border-color: var(--navy); background: var(--white); }
+  .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px; pointer-events: none; }
+  #result-count { font-size: 12px; color: var(--text-muted); font-family: 'Georgia', serif; white-space: nowrap; }
+  #clear-btn { padding: 6px 14px; border: 1px solid var(--border); border-radius: 6px; background: var(--white); font-size: 12px; cursor: pointer; color: var(--text-muted); font-family: 'Georgia', serif; }
+  #clear-btn:hover { background: var(--cream); }
+  #content { flex: 1; overflow-y: auto; padding: 20px; }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.visible { display: block; }
+  .panel-title { font-size: 20px; color: var(--navy); margin-bottom: 4px; font-family: 'Georgia', serif; }
+  .panel-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
+
+  /* OVERVIEW */
+  .overview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; }
+  .stat-num { font-size: 32px; color: var(--navy); font-family: 'Georgia', serif; }
+  .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .overview-section { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+  .overview-section h3 { font-size: 14px; color: var(--navy); margin-bottom: 10px; text-transform: uppercase; letter-spacing: .5px; }
+  .key-point { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; line-height: 1.5; }
+  .key-point:last-child { border-bottom: none; }
+  .kp-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); margin-top: 5px; flex-shrink: 0; }
+
+  /* CASE CARDS */
+  .cases-toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .sort-select { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; font-family: 'Georgia', serif; background: var(--white); color: var(--text); cursor: pointer; }
+  .cases-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
+  .case-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; transition: all .2s; overflow: hidden; }
+  .case-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.1); border-color: var(--navy); transform: translateY(-1px); }
+  .case-card-header { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); }
+  .case-year { font-size: 11px; color: var(--text-muted); font-family: 'Georgia', serif; }
+  .case-title { font-size: 14px; font-weight: bold; color: var(--navy); margin: 3px 0 5px; line-height: 1.3; }
+  .case-gr { font-size: 11px; color: var(--text-muted); font-family: monospace; }
+  .case-tags { padding: 8px 16px; display: flex; flex-wrap: wrap; gap: 4px; }
+  .tag { padding: 2px 8px; border-radius: 10px; font-size: 11px; background: var(--tag-bg); color: var(--tag-text); }
+  .tag.donation { background: var(--amber-bg); color: var(--amber); }
+  .tag.ownership { background: var(--blue-bg); color: var(--blue); }
+  .tag.jurisdiction { background: var(--green-bg); color: var(--green); }
+  .tag.retroactivity { background: #f3e8ff; color: #7c3aed; }
+  .tag.expropriation { background: var(--red-bg); color: var(--red); }
+  .tag.police-power { background: #ecfdf5; color: #065f46; }
+  .tag.water { background: #e0f2fe; color: #0369a1; }
+  .tag.estoppel { background: #fdf2f8; color: #9d174d; }
+  .case-ruling-preview { padding: 0 16px 14px; font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .case-no-results { text-align: center; padding: 40px; color: var(--text-muted); font-style: italic; grid-column: 1/-1; }
+
+  /* MODAL */
+  #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+  #modal-overlay.open { display: flex; }
+  #modal { background: var(--white); border-radius: 12px; max-width: 760px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+  .modal-header { background: var(--navy); padding: 20px 24px; border-radius: 12px 12px 0 0; position: sticky; top: 0; }
+  .modal-year-gr { font-size: 12px; color: #99aabb; margin-bottom: 6px; font-family: monospace; }
+  .modal-title { font-size: 18px; color: var(--white); font-family: 'Georgia', serif; line-height: 1.3; }
+  .modal-close { position: absolute; top: 16px; right: 18px; color: #99aabb; cursor: pointer; font-size: 22px; background: none; border: none; }
+  .modal-close:hover { color: var(--white); }
+  .modal-body { padding: 22px 24px; }
+  .modal-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 18px; }
+  .modal-section { margin-bottom: 20px; }
+  .modal-section-title { font-size: 12px; text-transform: uppercase; letter-spacing: .8px; color: var(--text-muted); margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+  .modal-section p, .modal-section li { font-size: 13px; line-height: 1.7; color: var(--text); margin-bottom: 6px; }
+  .modal-section ul, .modal-section ol { padding-left: 18px; }
+  .ruling-box { background: var(--navy); color: #e8edf5; padding: 14px 16px; border-radius: 8px; font-size: 13px; line-height: 1.7; margin-top: 6px; }
+  .ruling-box strong { color: var(--gold); }
+  .quote-block { border-left: 3px solid var(--gold); padding: 10px 14px; background: #fffbf0; font-style: italic; font-size: 13px; line-height: 1.7; color: var(--text); margin: 8px 0; border-radius: 0 6px 6px 0; }
+  .cite-link { color: var(--navy); text-decoration: underline; cursor: pointer; font-size: 12px; }
+  .cite-link:hover { color: var(--gold); }
+  .modal-nav { display: flex; justify-content: space-between; padding: 14px 24px; border-top: 1px solid var(--border); }
+  .modal-nav-btn { padding: 7px 14px; border: 1px solid var(--border); border-radius: 6px; background: var(--white); font-size: 12px; cursor: pointer; color: var(--navy); font-family: 'Georgia', serif; }
+  .modal-nav-btn:hover { background: var(--navy); color: var(--white); }
+  .modal-nav-btn:disabled { opacity: .4; cursor: default; }
+  .lawphil-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: var(--gold); color: var(--navy); border-radius: 6px; font-size: 13px; font-family: 'Georgia', serif; font-weight: bold; text-decoration: none; border: none; cursor: pointer; transition: background .15s; }
+  .lawphil-btn:hover { background: var(--gold-light); }
+  .lawphil-btn-sm { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; background: transparent; color: var(--navy); border: 1px solid var(--border); border-radius: 5px; font-size: 11px; font-family: 'Georgia', serif; text-decoration: none; cursor: pointer; transition: all .15s; white-space: nowrap; }
+  .lawphil-btn-sm:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
+  .statute-link { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; background: rgba(255,255,255,.1); color: var(--gold-light); border: 1px solid rgba(201,168,76,.3); border-radius: 5px; font-size: 11px; text-decoration: none; transition: all .15s; }
+  .statute-link:hover { background: rgba(201,168,76,.25); color: var(--gold); }
+
+  /* STATUTES */
+  .statute-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+  .statute-header { padding: 14px 18px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; background: var(--navy); color: var(--white); }
+  .statute-name { font-size: 14px; font-family: 'Georgia', serif; }
+  .statute-date { font-size: 11px; color: #99aabb; }
+  .statute-toggle { color: var(--gold); font-size: 16px; transition: transform .2s; }
+  .statute-card.open .statute-toggle { transform: rotate(180deg); }
+  .statute-body { display: none; padding: 16px 18px; }
+  .statute-card.open .statute-body { display: block; }
+  .provision { background: var(--cream); border-radius: 6px; padding: 12px; margin-bottom: 10px; font-size: 13px; line-height: 1.7; }
+  .provision-label { font-weight: bold; color: var(--navy); margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: .3px; }
+  .prov-text { color: var(--text); }
+  .related-cases { margin-top: 10px; }
+  .related-cases span { font-size: 11px; color: var(--text-muted); }
+  .related-case-link { font-size: 11px; color: var(--navy); text-decoration: underline; cursor: pointer; margin-left: 6px; }
+  .related-case-link:hover { color: var(--gold); }
+
+  /* Q&A */
+  .qa-item { background: var(--white); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
+  .qa-q { padding: 14px 18px; cursor: pointer; display: flex; align-items: flex-start; gap: 12px; }
+  .qa-q-label { background: var(--navy); color: var(--gold); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; flex-shrink: 0; margin-top: 1px; }
+  .qa-q-text { font-size: 14px; color: var(--navy); line-height: 1.5; font-family: 'Georgia', serif; }
+  .qa-expand { margin-left: auto; color: var(--text-muted); font-size: 16px; flex-shrink: 0; transition: transform .2s; }
+  .qa-item.open .qa-expand { transform: rotate(180deg); }
+  .qa-a { display: none; padding: 0 18px 16px; border-top: 1px solid var(--border); }
+  .qa-item.open .qa-a { display: block; }
+  .qa-a-label { background: var(--gold); color: var(--navy); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; margin: 12px 0 8px; }
+  .qa-a-text { font-size: 13px; line-height: 1.7; color: var(--text); }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 40px; }
+  .timeline::before { content: ''; position: absolute; left: 14px; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--gold), var(--navy)); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot { position: absolute; left: -33px; top: 4px; width: 16px; height: 16px; border-radius: 50%; background: var(--white); border: 2px solid var(--gold); z-index: 1; cursor: pointer; transition: all .15s; }
+  .tl-dot.law { background: var(--gold); }
+  .tl-dot.case { background: var(--navy); border-color: var(--navy); }
+  .tl-dot:hover { transform: scale(1.3); }
+  .tl-card { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; cursor: pointer; transition: all .15s; }
+  .tl-card:hover { box-shadow: 0 3px 12px rgba(0,0,0,.1); border-color: var(--navy); }
+  .tl-year { font-size: 11px; color: var(--text-muted); font-family: monospace; }
+  .tl-title { font-size: 13px; color: var(--navy); font-weight: bold; margin: 2px 0; }
+  .tl-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+  .tl-badge { display: inline-block; padding: 1px 7px; border-radius: 8px; font-size: 10px; margin-top: 4px; }
+  .tl-badge.law { background: var(--amber-bg); color: var(--amber); }
+  .tl-badge.case { background: var(--blue-bg); color: var(--blue); }
+
+  /* HIGHLIGHT */
+  mark { background: #fef08a; padding: 0 1px; border-radius: 2px; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #aaa; }
+
+  /* Google CSE overrides */
+  #websearch-box { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 20px; min-height: 200px; }
+  .gsc-control-cse { background: transparent !important; border: none !important; padding: 0 !important; }
+  .gsc-search-box { margin-bottom: 16px !important; }
+  .gsc-input-box { border: 1px solid var(--border) !important; border-radius: 8px !important; background: var(--cream) !important; }
+  .gsc-search-button-v2 { background: var(--navy) !important; border-color: var(--navy) !important; border-radius: 6px !important; padding: 8px 16px !important; }
+  .gsc-result-info, .gsc-orderby-label { font-family: 'Georgia', serif !important; font-size: 12px !important; color: var(--text-muted) !important; }
+  .gs-title { color: var(--navy) !important; font-family: 'Georgia', serif !important; }
+  .gs-snippet { font-family: 'Georgia', serif !important; font-size: 13px !important; }
+
+  /* MOBILE NAV — hidden on desktop */
+  #mobile-nav { display: none; }
+
+  @media (max-width: 768px) {
+    /* Mobile color variables */
+    :root {
+      --m-navy: #083A4F;
+      --m-teal: #407E8C;
+      --m-gold: #A58D66;
+      --m-aqua: #C0D5D6;
+      --m-sand: #E5E1DD;
+    }
+
+    /* Layout */
+    body { flex-direction: column; height: 100vh; overflow: hidden; background: var(--m-sand); }
+    #sidebar { display: none; }
+    #main { flex: 1; overflow-y: auto; padding-bottom: 68px; }
+
+    /* Topbar */
+    #topbar {
+      flex-direction: column; align-items: stretch;
+      gap: 8px; padding: 10px 12px;
+      background: var(--m-navy);
+    }
+    #topbar input {
+      width: 100%; box-sizing: border-box;
+      background: rgba(255,255,255,0.12); color: white;
+      border-color: var(--m-teal); border-radius: 6px;
+      padding: 8px 12px; font-size: 14px;
+    }
+    #topbar input::placeholder { color: var(--m-aqua); }
+    .filter-row { flex-wrap: wrap; gap: 6px; }
+    #result-count { color: var(--m-aqua); font-size: 11px; }
+    #clear-btn {
+      background: var(--m-teal); color: white;
+      border: none; border-radius: 6px; padding: 6px 12px;
+      font-size: 12px; cursor: pointer;
+    }
+
+    /* Topic chips */
+    .topic-chip { font-size: 11px; padding: 4px 10px; }
+    .topic-chip.active { background: var(--m-teal) !important; border-color: var(--m-teal) !important; color: white !important; }
+
+    /* Cases grid */
+    .cases-grid { grid-template-columns: 1fr !important; gap: 12px; padding: 12px; }
+    .case-card { border-color: var(--m-aqua); }
+    .case-card:hover { border-left-color: var(--m-teal); box-shadow: 0 2px 8px rgba(64,126,140,0.2); }
+
+    /* Stat cards */
+    .stats-grid { grid-template-columns: 1fr 1fr !important; gap: 10px; }
+
+    /* Panels */
+    .panel { background: var(--m-sand); padding: 16px 12px; }
+    .panel-title { font-size: 17px; }
+
+    /* Timeline */
+    .timeline { padding-left: 20px; }
+
+    /* Modal */
+    .modal-overlay { align-items: flex-end; padding: 0; }
+    .modal-box {
+      max-width: 100% !important; width: 100% !important;
+      margin: 0 !important; border-radius: 16px 16px 0 0 !important;
+      max-height: 90vh !important; overflow-y: auto;
+    }
+
+    /* Bottom tab bar */
+    #mobile-nav {
+      display: flex;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--m-navy);
+      border-top: 2px solid var(--m-gold);
+      z-index: 1000;
+      height: 60px;
+    }
+    #mobile-nav button {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: none; border: none; border-top: 3px solid transparent;
+      color: var(--m-aqua); font-size: 0.58rem;
+      letter-spacing: 0.4px; cursor: pointer; gap: 2px;
+      padding: 6px 2px; font-family: 'Georgia', serif;
+      transition: color 0.15s;
+    }
+    #mobile-nav button span { font-size: 1.15rem; line-height: 1; }
+    #mobile-nav button.active {
+      color: var(--m-gold);
+      border-top-color: var(--m-gold);
+    }
+  }
+.site-footer { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.96); border-top: 1px solid rgba(0,0,0,0.1); text-align: center; padding: 0.45rem 1rem; font-size: 0.72rem; color: #888; z-index: 1; }
+.site-footer a { color: inherit; text-decoration: none; }
+.site-footer a:hover { color: #555; text-decoration: underline; }
+@media (max-width: 768px) { .site-footer { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div id="sidebar-header">
+    <h1>Open Space Law</h1>
+    <p>Atty. Cat Hermoso, J.D., REB, REA</p>
+  </div>
+  <div class="nav-section">
+    <div class="nav-item active" onclick="showPanel('overview')"><span class="nav-icon">🏛</span> Overview</div>
+    <div class="nav-item" onclick="showPanel('cases')"><span class="nav-icon">⚖</span> Cases <span class="nav-count">18</span></div>
+    <div class="nav-item" onclick="showPanel('statutes')"><span class="nav-icon">📜</span> Statutes <span class="nav-count">5</span></div>
+    <div class="nav-item" onclick="showPanel('qa')"><span class="nav-icon">💬</span> Q &amp; A <span class="nav-count">5</span></div>
+    <div class="nav-item" onclick="showPanel('timeline')"><span class="nav-icon">📅</span> Timeline</div>
+    <div class="nav-item" onclick="showPanel('websearch')"><span class="nav-icon">🔎</span> Web Search</div>
+  </div>
+  <div id="topic-filters">
+    <div class="filter-label">Filter by Topic</div>
+    <span class="topic-chip" onclick="filterTopic('Donation')">Donation</span>
+    <span class="topic-chip" onclick="filterTopic('Ownership')">Ownership</span>
+    <span class="topic-chip" onclick="filterTopic('HLURB Jurisdiction')">Jurisdiction</span>
+    <span class="topic-chip" onclick="filterTopic('Retroactivity')">Retroactivity</span>
+    <span class="topic-chip" onclick="filterTopic('Expropriation')">Expropriation</span>
+    <span class="topic-chip" onclick="filterTopic('Police Power')">Police Power</span>
+    <span class="topic-chip" onclick="filterTopic('Water Facilities')">Water</span>
+    <span class="topic-chip" onclick="filterTopic('Estoppel')">Estoppel</span>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="topbar">
+    <div id="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input id="search" type="text" placeholder="Search cases, statutes, keywords…" oninput="onSearch()">
+    </div>
+    <span id="result-count"></span>
+    <button id="clear-btn" onclick="clearAll()">Clear</button>
+  </div>
+  <div id="content">
+
+    <!-- OVERVIEW -->
+    <div id="panel-overview" class="panel visible">
+      <h2 class="panel-title">Philippine Open Space Law — Research Overview</h2>
+      <p class="panel-sub">A study on Philippine Law and Jurisprudence on Open Space Requirements in Residential Subdivisions</p>
+      <div class="overview-grid">
+        <div class="stat-card"><div class="stat-num">18</div><div class="stat-label">Supreme Court Cases</div></div>
+        <div class="stat-card"><div class="stat-num">5</div><div class="stat-label">Key Statutes</div></div>
+        <div class="stat-card"><div class="stat-num">1941</div><div class="stat-label">Earliest Case</div></div>
+        <div class="stat-card"><div class="stat-num">2025</div><div class="stat-label">Most Recent Case</div></div>
+      </div>
+      <div class="overview-section">
+        <h3>Definition of Open Space</h3>
+        <p style="font-size:13px;line-height:1.7;background:#fffbf0;padding:12px;border-radius:6px;border-left:3px solid var(--gold);">
+          <strong>"Open Space"</strong> — an area reserved exclusively for parks, playgrounds, recreational uses, schools, roads, places of worship, hospitals, health centers, barangay centers and other similar facilities and amenities. <em>(Sec. 1, P.D. 1216)</em>
+        </p>
+      </div>
+      <div class="overview-section">
+        <h3>Open Space Reservation Requirements</h3>
+        <div class="key-point"><div class="kp-dot"></div><div><strong>P.D. 953 (1976):</strong> 30% of total subdivision area, exclusive of roads and alleys, reserved for parks and recreational areas.</div></div>
+        <div class="key-point"><div class="kp-dot"></div><div><strong>P.D. 957 + P.D. 1216 (1977):</strong> 30% of gross area for subdivisions ≥ 1 hectare — with density-based breakdowns: 9% (high density/social), 7% (medium/economic), 3.5% (low/open market).</div></div>
+        <div class="key-point"><div class="kp-dot"></div><div><strong>IRR of B.P. 220 (1982):</strong> Separate standards for economic and socialized housing projects in urban and rural areas.</div></div>
+      </div>
+      <div class="overview-section">
+        <h3>Core Legal Principles from Jurisprudence</h3>
+        <div class="key-point"><div class="kp-dot"></div><div><strong>Developers cannot be compelled to donate</strong> road lots or open spaces. Compulsory donation under Sec. 31 PD 957 is invalid — donation requires <em>animus donandi</em>. <span class="cite-link" onclick="openCaseByGR('194190')">DPWH v. Llamas (2017)</span>, <span class="cite-link" onclick="openCaseByGR('264652')">DAALCO (2024)</span></div></div>
+        <div class="key-point"><div class="kp-dot"></div><div><strong>Open spaces remain private</strong> until validly donated or expropriated with just compensation. <span class="cite-link" onclick="openCaseByGR('128131')">White Plains (1998)</span></div></div>
+        <div class="key-point"><div class="kp-dot"></div><div><strong>City ordinances</strong> declaring private road lots public without just compensation are null and void — beyond the ambit of police power. <span class="cite-link" onclick="openCaseByGR('202384')">EPCIB v. SRA (2021)</span></div></div>
+        <div class="key-point"><div class="kp-dot"></div><div><strong>HLURB/HSAC has broad jurisdiction</strong> over open space disputes — including mortgage annulment, road lot consolidation, and contractual claims. <span class="cite-link" onclick="openCaseByGR('198745')">BDO v. Sunnyside (2016)</span></div></div>
+        <div class="key-point"><div class="kp-dot"></div><div><strong>P.D. 957 has retroactive effect</strong> for non-development cases (Eugenio, 1996) but <strong>P.D. 1216 does not</strong> (Dueñas, 2004).</div></div>
+        <div class="key-point"><div class="kp-dot"></div><div><strong>Water facilities</strong> used by residents for 30+ years constitute open space by easement through prescription; sale thereof is void. <span class="cite-link" onclick="openCaseByGR('189755')">Liwag v. Happy Glen (2012)</span></div></div>
+        <div class="key-point"><div class="kp-dot"></div><div><strong>HOAs may regulate passage</strong> through a subdivision for safety and security, even if roads have been donated to the LGU. <span class="cite-link" onclick="openCaseByGR('211353')">Kwong v. Diamond HOA (2019)</span></div></div>
+      </div>
+      <div class="overview-section">
+        <h3>Donation Rules — Quick Reference</h3>
+        <div class="key-point"><div class="kp-dot"></div><div>Roads, alleys, sidewalks &amp; playgrounds → may be donated to the <strong>LGU</strong> (LGU must accept)</div></div>
+        <div class="key-point"><div class="kp-dot"></div><div>Parks &amp; playgrounds → may instead be donated to the <strong>Homeowners Association</strong> (with LGU consent)</div></div>
+        <div class="key-point"><div class="kp-dot"></div><div>Donated open spaces are <strong>non-convertible</strong> — no portion may be converted to any other use</div></div>
+        <div class="key-point"><div class="kp-dot"></div><div>A valid donation requires: <strong>(1)</strong> public instrument (notarized), <strong>(2)</strong> formal acceptance by the donee. <span class="cite-link" onclick="openCaseByGR('203883')">Talayan Village (2015)</span></div></div>
+        <div class="key-point"><div class="kp-dot"></div><div>Section 31 donation only covers roads/alleys/sidewalks/playgrounds — <strong>not</strong> other open spaces like water facilities. <em>Expressio unius est exclusio alterius.</em> <span class="cite-link" onclick="openCaseByGR('264652')">DAALCO (2024)</span></div></div>
+      </div>
+    </div>
+
+    <!-- CASES -->
+    <div id="panel-cases" class="panel">
+      <h2 class="panel-title">Case Law</h2>
+      <p class="panel-sub">Click any card to view full facts and ruling</p>
+      <div class="cases-toolbar">
+        <select class="sort-select" onchange="sortCases(this.value)">
+          <option value="year-asc">Sort: Chronological (oldest first)</option>
+          <option value="year-desc">Sort: Chronological (newest first)</option>
+          <option value="title">Sort: Alphabetical</option>
+        </select>
+      </div>
+      <div class="cases-grid" id="cases-grid"></div>
+    </div>
+
+    <!-- STATUTES -->
+    <div id="panel-statutes" class="panel">
+      <h2 class="panel-title">Key Statutes</h2>
+      <p class="panel-sub">Presidential Decrees, Republic Acts, and IRRs governing open spaces</p>
+      <div id="statutes-container"></div>
+    </div>
+
+    <!-- Q&A -->
+    <div id="panel-qa" class="panel">
+      <h2 class="panel-title">Q &amp; A</h2>
+      <p class="panel-sub">Common legal questions on open spaces, drawn from your research notes</p>
+      <div id="qa-container"></div>
+    </div>
+
+    <!-- WEB SEARCH -->
+    <div id="panel-websearch" class="panel">
+      <h2 class="panel-title">Web Search</h2>
+      <p class="panel-sub">Search the web for Philippine open space cases, statutes, and legal commentary via Google</p>
+      <div id="websearch-box" style="margin-top:8px;">
+        <div class="gcse-search"></div>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div id="panel-timeline" class="panel">
+      <h2 class="panel-title">Legal Timeline</h2>
+      <p class="panel-sub">Chronological progression of open space law and jurisprudence</p>
+      <div class="timeline" id="timeline-container"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="modal-overlay" onclick="closeModal(event)">
+  <div id="modal">
+    <div class="modal-header" style="position:relative;">
+      <div class="modal-year-gr" id="modal-yr-gr"></div>
+      <div class="modal-title" id="modal-title"></div>
+      <button class="modal-close" onclick="document.getElementById('modal-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tags" id="modal-tags"></div>
+      <div class="modal-section" id="modal-facts-sec">
+        <div class="modal-section-title">Facts</div>
+        <div id="modal-facts"></div>
+      </div>
+      <div class="modal-section" id="modal-ruling-sec">
+        <div class="modal-section-title">Ruling</div>
+        <div id="modal-ruling"></div>
+      </div>
+      <div class="modal-section" id="modal-quote-sec" style="display:none">
+        <div class="modal-section-title">Key Quotation</div>
+        <div id="modal-quote"></div>
+      </div>
+      <div class="modal-section" id="modal-related-sec" style="display:none">
+        <div class="modal-section-title">Related Cases</div>
+        <div id="modal-related"></div>
+      </div>
+    </div>
+    <div class="modal-nav">
+      <button class="modal-nav-btn" id="modal-prev" onclick="navigateModal(-1)">← Previous</button>
+      <button class="modal-nav-btn" id="modal-next" onclick="navigateModal(1)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===========================
+// DATA
+// ===========================
+const CASES = [
+  {
+    id: 1,
+    gr: "48194",
+    year: 1941,
+    date: "December 27, 1941",
+    url: null,
+    title: "Young vs City of Manila",
+    court: "Supreme Court",
+    tags: ["Donation","Ownership","Road Lots"],
+    facts: [
+      "Plaintiff Young owned street areas that the City of Manila wished to use as public streets.",
+      "Young sought to compel Manila to purchase the street areas, or in the alternative, sought to prevent being compelled to donate the land.",
+      "The City sought to require Young to donate the street areas and transfer title."
+    ],
+    ruling: "The SC held that Young cannot be compelled to donate his street areas to the City of Manila, nor can Manila be compelled to purchase them. However, as long as Young retains the title and ownership of said street areas, he is under obligation to pay the land taxes thereon.",
+    quote: '"We are therefore of the opinion and so hold that the plaintiff cannot compel the defendant city of Manila to purchase from him the street areas described in his complaint. Neither can he be compelled to donate said land and transfer his title to the City so that the latter may build and maintain the streets."',
+    related: ["95522", "128131", "194190"]
+  },
+  {
+    id: 2,
+    gr: "95522",
+    year: 1991,
+    date: "February 7, 1991 (modified July 27, 1994)",
+    url: "https://lawphil.net/judjuris/juri1991/feb1991/gr_95522_1991.html",
+    title: "White Plains Association, Inc. vs Legaspi, et al. (QCDFC)",
+    court: "Supreme Court",
+    tags: ["Donation","Ownership","Road Lots"],
+    facts: [
+      "QCDFC (Quezon City Development and Financing Corporation) was the developer of White Plains Subdivision.",
+      "QCDFC filed a petition with CFI Rizal to convert a portion of Road Lot 1 into a residential lot, without the HA or LGU as parties.",
+      "Lower court rendered judgment in favor of QCDFC authorizing conversion. On appeal, CA initially favored HA, then reversed to favor QCDFC.",
+      "White Plains Association, Inc. elevated to SC.",
+      "In the 1991 Decision, SC directed QCDFC to execute a deed of donation of Road Lot 1 to Quezon City LGU.",
+      "Upon Second MR, SC issued a Resolution dated July 27, 1994 modifying the 1991 decision: title to Road Lot 1 remains with QCDFC but a lien/reservation for the construction of Highway 38 (C-5) was imposed."
+    ],
+    ruling: "SC directed QCDFC to donate Road Lot 1 to QC LGU (1991). Later modified (1994) to allow QCDFC to retain title with a lien for C-5 highway construction. Road lots remain private until donated to or expropriated by the government.",
+    quote: null,
+    related: ["128131", "48194", "194190"]
+  },
+  {
+    id: 3,
+    gr: "128131",
+    year: 1998,
+    date: "October 8, 1998",
+    url: "https://lawphil.net/judjuris/juri1998/oct1998/gr_128131_1998.html",
+    title: "White Plains Homeowners Association, Inc. vs CA and QCDFC",
+    court: "Supreme Court",
+    tags: ["Ownership","Road Lots","Donation"],
+    facts: [
+      "This case overturned the 1991 White Plains Decision.",
+      "The SC considered that Road Lot 1 has not been donated and no deed of donation exists.",
+      "Supervening event: the National Government decided to construct C-5 in another part of Quezon City, completely bypassing the White Plains area. The reservation for C-5 thus ceased to have any meaning.",
+      "SC cited Young v. City of Manila — subdivision streets belong to the owner until donated to the government or until expropriated upon payment of just compensation.",
+      "SC lifted the reservation/lien on Road Lot 1."
+    ],
+    ruling: "SC gave QCDFC full ownership rights over Road Lot 1, including the right to develop the property or collect fees and rentals from the gardeners. Subdivision streets are private property until conveyed by donation or expropriation.",
+    quote: '"Subdivision streets belonged to the owner until donated to the government or until expropriated upon payment of just compensation."',
+    related: ["95522", "48194", "194190"]
+  },
+  {
+    id: 4,
+    gr: "109404",
+    year: 1996,
+    date: "January 22, 1996",
+    url: "https://lawphil.net/judjuris/juri1996/jan1996/gr_109404_1996.html",
+    title: "Eugenio v. Executive Secretary Drilon, HLURB",
+    court: "Supreme Court",
+    tags: ["Retroactivity","HLURB Jurisdiction"],
+    facts: [
+      "Private respondents purchased properties on installment basis from petitioner Florencio Eugenio (E&S Delta Village) in Quezon City, with contracts entered in 1972 — before PD 957 took effect in 1976.",
+      "NHA issued a cease-and-desist order for non-development. While NHA cases were pending, developer resold one of the lots to Sps. Relevo.",
+      "Private respondent filed a complaint with HSRC for annulment of sale and reconveyance.",
+      "OAALA upheld the developer's right to cancel; HSRC reversed and ordered PD 957 applied.",
+      "Executive Secretary Drilon affirmed. Developer appealed to SC arguing PD 957 should not apply to pre-1976 contracts."
+    ],
+    ruling: "SC ruled PD 957 is to be given retroactive effect to cover contracts executed prior to its enactment. The law's intent was to remedy the alarming situation of subdivision fraud and protect buyers. Sections 20, 21 and 23 of PD 957 have express retroactive effect.",
+    quote: '"P.D. 957 did not expressly provide for retroactivity in its entirety, but such can be plainly inferred from the unmistakable intent of the law."',
+    related: ["149417"]
+  },
+  {
+    id: 5,
+    gr: "149417",
+    year: 2004,
+    date: "June 4, 2004",
+    url: "https://lawphil.net/judjuris/juri2004/jun2004/gr_149417_2004.html",
+    title: "Dueñas vs Santos Subdivision Homeowners' Association",
+    court: "Supreme Court",
+    tags: ["Retroactivity","Open Space Requirements"],
+    facts: [
+      "Cecilio J. Santos formed Cecilio J. Santos Subdivision in 1966 and subdivided 2.2 hectares in Valenzuela City into smaller lots.",
+      "In 1997, SSHA submitted a resolution asking Gloria Dueñas (daughter of Cecilio) to provide open space for recreational use under PD 957.",
+      "HLURB opined that the open space requirements of PD 957 as amended by PD 1216 were not applicable to Santos Subdivision (plans approved in 1966).",
+      "SSHA argued PD 957 should apply retroactively, and that Gloria should be bound by her late father's verbal promise to provide open space in Phase III.",
+      "HLURB-NCR dismissed: no evidence of successor-in-interest, no open space designated in approved plan, verbal promise barred by dead man's statute.",
+      "CA reversed HLURB and remanded for determination of the definitive land area for open space."
+    ],
+    ruling: "SC reversed the CA. PD 1216 which amended PD 957 does not apply retroactively because there is no express provision for retroactive application. Eugenio v. Drilon is inapplicable — that case involved non-development and non-payment, which is not present here.",
+    quote: '"Article 4 of the Civil Code provides that laws shall have no retroactive effect, unless the contrary is provided. There being no such provision in P.D. 1216, it cannot be applied to a situation that occurred years before its promulgation."',
+    related: ["109404"]
+  },
+  {
+    id: 6,
+    gr: "148357",
+    year: 2006,
+    date: "June 30, 2006",
+    url: "https://lawphil.net/judjuris/juri2006/jun2006/gr_148357_2006.html",
+    title: "Albon vs Fernando, Mayor of Marikina",
+    court: "Supreme Court",
+    tags: ["Ownership","Police Power","LGU Powers"],
+    facts: [
+      "In May 1999, City of Marikina undertook a public works project to widen, clean and repair sidewalks of Marikina Greenheights Subdivision under Ordinance No. 59 (1993).",
+      "Aniano Albon filed a taxpayer's suit alleging the sidewalks were private property owned by V.V. Soliven, Inc., and the city's use of public funds for private property was unconstitutional.",
+      "RTC dismissed the petition, ruling Marikina had authority under police power; invoked the 1991 White Plains Decision that roads and sidewalks inside the subdivision were deemed public property.",
+      "The 1991 White Plains Decision had since been reversed by the 1998 White Plains Decision."
+    ],
+    ruling: "SC held the question of ownership of the open spaces and sidewalks is material to the validity of the city's expenditure. Whether V.V. Soliven retained ownership or had donated them is a factual matter. SC remanded to RTC to determine: (1) whether V.V. Soliven retained ownership or donated the sidewalks to Marikina; and (2) whether the public has full and unimpeded access to the roads and sidewalks.",
+    quote: null,
+    related: ["95522", "128131"]
+  },
+  {
+    id: 7,
+    gr: "140092",
+    year: 2006,
+    date: "September 8, 2006",
+    url: "https://lawphil.net/judjuris/juri2006/sep2006/gr_140092_2006.html",
+    title: "United BF Homeowners' Association, Inc. vs Barangay Chairman, BF Homes Parañaque",
+    court: "Supreme Court",
+    tags: ["Administration","Barangay Powers","Open Space"],
+    facts: [
+      "BFHI (BF Homeowners Inc.) owned an 'open space' in BF Homes Parañaque.",
+      "A multi-purpose hall was constructed on the open space using government funds.",
+      "BFHI claimed it should have administrative rights over the hall as owner of the open space.",
+      "Barangay Chairman and Sanggunian asserted authority to administer the hall under RA 7160, Sec. 391(a)(7)."
+    ],
+    ruling: "SC held that although BFHI is the owner of the open space, the barangay has the authority to administer the multi-purpose hall because it was constructed with government funds. Acts of administration are distinct from acts of ownership. However, the barangay's authority is purely administrative — they cannot exercise acts of ownership, and erred in constructing a fence on areas adjoining the hall (which are part of the open space).",
+    quote: '"Although the building was erected on an \'open space\' owned by BFHI, there is no doubt that the cost of its construction was sourced from government funds. Thus, the hall falls within the ambit of respondents\' jurisdiction."',
+    related: []
+  },
+  {
+    id: 8,
+    gr: "194190",
+    year: 2017,
+    date: "January 25, 2017",
+    url: "https://lawphil.net/judjuris/juri2017/jan2017/gr_194190_2017.html",
+    title: "DPWH vs Spouses Llamas",
+    court: "Supreme Court",
+    tags: ["Donation","Expropriation","Compulsory Donation Invalid"],
+    facts: [
+      "The case concerned road lots in a subdivision and whether the government could compel the developer to donate them under Sec. 31 of PD 957 as amended by PD 1216.",
+      "The SC was asked to determine the validity of the 'compulsion to donate' in Sec. 31."
+    ],
+    ruling: "SC made a categorical statement that the compulsion to donate (and concomitant compulsion to accept) under Sec. 31 of PD 957 cannot be sustained as valid. Delineated roads and streets remain private until conveyed to the government by donation or through expropriation. An owner may not be forced to donate even if the property has been delineated as road lots — that would be an illegal taking.",
+    quote: '"Delineated roads and streets, whether part of a subdivision or segregated for public use, remain private and will remain as such until conveyed to the government by donation or through expropriation proceedings. An owner may not be forced to donate his or her property even if it has been delineated as road lots because that would partake of an illegal taking."',
+    related: ["48194", "128131", "264652"]
+  },
+  {
+    id: 9,
+    gr: "113739",
+    url: "https://lawphil.net/judjuris/juri1995/may1995/gr_113739_1995.html",
+    year: 1995,
+    date: "May 2, 1995",
+    title: "Spouses Claudio M. Anonuevo vs CA",
+    court: "Supreme Court",
+    tags: ["Estoppel","Open Space","Torrens Title"],
+    facts: [
+      "Subject property is a 1,684 sq.m. lot (Lot II, Block 6) in Carmel II-A Subdivision, QC — designated as open space (6% of subdivided property).",
+      "The Homeowners used the lot as park and playground; a basketball court, kiosk and benches were constructed.",
+      "TCT was sold a retro by Carmel Subdivision to Sentinel Insurance Co. Inc. Upon dissolution of Sentinel, lot was sold at public auction. Francisco Padilla bought it and later sold it to Sps. Anonuevo on March 4, 1985.",
+      "Lower court dismissed plaintiffs' complaint. CA reversed and declared Lot II Block 6 as OPEN SPACE for public use, voided Padilla's TCT and ordered Sps. Anonuevo to cease and desist."
+    ],
+    ruling: "SC upheld the CA decision. The defense of indefeasibility of the Torrens Title does not extend to a transferee who takes the certificate of title with notice of a flaw in his title. The open space designation remains binding.",
+    quote: '"The defense of indefeasibility of the Torrens Title does not extend to a transferee who takes the certificate of title with notice of a flaw in his title."',
+    related: []
+  },
+  {
+    id: 10,
+    gr: "189755",
+    url: "https://lawphil.net/judjuris/juri2012/jul2012/gr_189755_2012.html",
+    year: 2012,
+    date: "July 4, 2012",
+    title: "Liwag vs Happy Glen Loop Homeowners Association, Inc.",
+    court: "Supreme Court",
+    tags: ["Water Facilities","Open Space","HLURB Jurisdiction","Easement"],
+    facts: [
+      "F.G.R. Sales, developer of Happy Glen Loop Subdivision (Caloocan), assigned rights to Marcelo to settle a debt.",
+      "Marcelo represented to buyers, NHA, and HSRC that a water facility was available in the subdivision.",
+      "For almost 30 years, residents relied on the facility as their ONLY source of water.",
+      "In September 1995, Marcelo sold Lot 11, Block 5 (where the water tank was) to Hermogenes, transferring title.",
+      "When Hermogenes died in 2003, Emeteria Liwag demanded removal of the water tank from the lot.",
+      "HA filed before HLURB for specific performance, confirmation, maintenance and donation of water facilities; annulment of sale; cancellation of titles.",
+      "HLURB Arbiter: ruled for HA and invalidated the transfer. HLURB Board: found Lot 11 Block 5 was NOT an open space. OP: ruled it was open space. CA: affirmed OP."
+    ],
+    ruling: "SC affirmed: (1) HLURB has exclusive jurisdiction; (2) A continuous easement of water facility was acquired through 30 years of prescription; (3) The water facility location forms part of the area reserved for open space (ejusdem generis); (4) Open spaces are beyond the commerce of man — the sale was void.",
+    quote: '"The law expressly provides that open spaces in subdivisions are reserved for public use and are beyond the commerce of man. As such, these open spaces are not susceptible of private ownership and appropriation."',
+    related: ["264652", "198745"]
+  },
+  {
+    id: 11,
+    gr: "220042",
+    url: "https://lawphil.net/judjuris/juri2018/sep2018/gr_220042_2018.html",
+    year: 2018,
+    date: "September 5, 2018",
+    title: "Casa Milan Homeowners' Association, Inc. vs Roman Catholic Archbishop of Manila (RCAM)",
+    court: "Supreme Court",
+    tags: ["Donation","Open Space","Non-Alienable","Conversion"],
+    facts: [
+      "B.C. Regalado & Co. owned Lot 34, Block 143 (6,083 sq.m.), designated as open space/playground in Casa Milan Subdivision.",
+      "In 1995, RCAM constructed a parish church on a portion of Lot 34.",
+      "Developer (New North Fairview Realty and Development, Inc.) requested segregation/conversion with HLURB, supported by residents' letter.",
+      "City Council of QC approved segregation and conversion to multipurpose center via Resolution.",
+      "During pendency of conversion petition, Regalado executed a Deed of Donation over 4,000 sq.m. of Lot 34 in favor of RCAM.",
+      "On December 3, 2009, Casa Milan HA filed a complaint against RCAM, Regalado, and RD of QC: (a) donation is invalid without petitioners' consent; (b) RCAM was in bad faith when it built a parish church without color of title.",
+      "RTC granted RCAM's Motion to Dismiss for lack of cause of action. CA affirmed."
+    ],
+    ruling: "SC sustained the dismissal. Open spaces belong to the subdivision owners and developers primarily — they have the freedom to retain or dispose of the open space in whatever manner they desire. The 1991 White Plains Decision's allusion to compulsion was repudiated by the 1998 White Plains Decision. In this case, conversion had LGU approval and resident consent.",
+    quote: '"Open spaces belong to the subdivision owners and developers primarily, meaning they have the freedom to retain or dispose of the open space in whatever manner they desire."',
+    related: ["128131", "194190", "264652"]
+  },
+  {
+    id: 12,
+    gr: "203883",
+    url: "https://lawphil.net/judjuris/juri2015/nov2015/gr_203883_2015.html",
+    year: 2015,
+    date: "November 10, 2015",
+    title: "Homeowners Association of Talayan Village vs J.M. Tuason and Co., Inc.",
+    court: "Supreme Court",
+    tags: ["Donation","Deed of Donation Void","Open Space"],
+    facts: [
+      "Subject matter is a 22,012 sq.m. lot (Block 494) of Talayan Village, part of Sta. Mesa Heights Subdivision, QC.",
+      "Block 503 was designated as park/open space. Block 494 remained undivided.",
+      "QC Council Ordinance No. 5095 (1962) directed all subdivision owners to turn over 6% of total area as open space.",
+      "J.M. Tuason, through Araneta, executed a Deed of Donation and Acceptance in favor of QC — but it was NOT notarized, and no record exists showing it was accepted.",
+      "Block 494 became site of the Talayan Village Barangay Hall, multi-purpose hall, basketball, tennis, and football courts (built with HATVI and QC government expenses).",
+      "Due to tax delinquency, J.M. Tuason executed a Unilateral Deed of Sale transferring Block 494 to Talayan Holdings Inc. (THI). THI mortgaged the property with Equitable Bank.",
+      "HATVI filed case for annulment of sale, cancellation of titles and mortgage, acceptance of donation, and damages."
+    ],
+    ruling: "SC held: (1) Block 494 is NOT an open space or park — Block 503 was designated as such; (2) The Deed of Donation is VOID for lack of notarization (must be in public instrument) and lack of acceptance by the donee; (3) J.M. Tuason was able to redeem the property; (4) the mortgage and Equitable Bank's mortgagee-in-good-faith status are valid.",
+    quote: '"The Deed of Donation executed by J.M. Tuason Co., Inc. in favor of the Quezon City government is void for lack of acceptance by the donee and for not having been made in a public instrument."',
+    related: []
+  },
+  {
+    id: 13,
+    gr: "202384",
+    url: "https://lawphil.net/judjuris/juri2021/may2021/gr_202384_2021.html",
+    year: 2021,
+    date: "May 4, 2021",
+    title: "Equitable PCI Bank vs South Rich Acres, Inc., Top Service, Inc., City of Las Piñas",
+    court: "Supreme Court",
+    tags: ["Police Power","Expropriation","Ordinance","Confiscation"],
+    facts: [
+      "City of Las Piñas enacted City Ordinance No. 343-97 declaring Marcos Alvarez Avenue a public road.",
+      "SRA and Top Service owned several parcels of land constituting a private road network, including Marcos Alvarez Avenue.",
+      "SRA filed a Petition for Declaratory Relief and Damages to annul City Ordinance No. 343-97.",
+      "RAMPI (later EPCIB/BDO) intervened as intervenor-defendant.",
+      "RTC declared the City Ordinance invalid and unconstitutional for taking property without just compensation. CA affirmed.",
+      "Found that lots belonging to SRA and Top Service were neither expropriated nor donated in favor of Las Piñas."
+    ],
+    ruling: "SC affirmed the unconstitutionality of the ordinance. The taking of SRA's property without just compensation amounts to confiscation which is beyond the ambit of police power. Road lots in a private subdivision are private property; the LGU should first acquire them by donation, purchase, or expropriation. The use of roads by the general public does not convert them into public property.",
+    quote: '"The Court finds that the declaration of the entirety of Marcos Alvarez Avenue as a public road despite the fact that the subject lots are owned by SRA is an act of unlawful taking of SRA\'s property. The taking of SRA\'s property without just compensation amounts to confiscation which is beyond the ambit of police power."',
+    related: ["128131", "194190"]
+  },
+  {
+    id: 14,
+    gr: "264652",
+    url: "https://lawphil.net/judjuris/juri2024/nov2024/gr_264652_2024.html",
+    year: 2024,
+    date: "November 4, 2024",
+    title: "DAALCO Development Corp. vs Palmas del Mar Homeowners Association (PDM-HOA)",
+    court: "Supreme Court",
+    tags: ["Donation","Water Facilities","Compulsory Donation Invalid","HLURB Jurisdiction"],
+    facts: [
+      "PDM-HOA filed a complaint demanding DAALCO donate all open spaces, roads, and parks of the subdivision to the LGU of Bacolod City under PD 1216.",
+      "PDM-HOA claimed DAALCO only donated portions of Lot 4 (water tank) and Road Lot 5B (underground water pipes).",
+      "PDM-HOA also demanded turnover of ownership and management of water facility under RA 9904.",
+      "DAALCO contended: (1) it had already complied with 30% open space requirement; (2) PD 1216 does not mandate donation of water facilities; (3) the water facilities also service the Palmas del Mar Resort Hotel.",
+      "HLURB Arbiter: ordered donation to Bacolod City and turnover of water management to PDM-HOA. HSAC: affirmed citing Liwag case. CA: affirmed and ordered donation of entirety of Lot 4."
+    ],
+    ruling: "SC reversed CA on both issues. (I) Sec. 31 PD 957 requires animus donandi — donation can only cover roads, alleys, sidewalks, and playgrounds (expressio unius est exclusio alterius). Water facility lots are not covered. DAALCO cannot be compelled to donate. (II) DAALCO is not required to turn over water management to PDM-HOA — the legislature expressly deleted the turnover requirement from RA 9904, and PDM-HOA failed to prove it consulted its general membership.",
+    quote: '"Sec. 31 of P.D. 956 requires animus donandi on the part of the owner or developer... Forcing Daalco to donate the subject property constitutes unlawful taking."',
+    related: ["194190", "220042", "189755"]
+  },
+  {
+    id: 15,
+    gr: "198745",
+    url: "https://lawphil.net/judjuris/juri2016/jan2016/gr_198745_2016.html",
+    year: 2016,
+    date: "January 13, 2016",
+    title: "Banco de Oro Unibank, Inc. vs Sunnyside Heights Homeowners Association",
+    court: "Supreme Court",
+    tags: ["HLURB Jurisdiction","Mortgage Annulment","Open Space"],
+    facts: [
+      "Mover Enterprises, Inc. (developer of Sunnyside Heights Subdivision, QC) mortgaged Lot 6, Block 10 to PCIB to secure a loan.",
+      "Mover failed to pay; PCIB foreclosed. Title was transferred to PCIB (later BDO).",
+      "SHHA filed with HLURB to declare the mortgage void, alleging the lot was their designated open space.",
+      "PCIB/BDO: the mortgaged lot is different from the open space lot; title had no annotation; PCIB was a mortgagee in good faith.",
+      "HLURB Arbiter: dismissed (different lot). HLURB Board: SHHA presented HLURB certification showing former Block 10 (the open space) was renamed Block 7 and covered by PCIB's title. Board reversed and voided the mortgage.",
+      "OP affirmed. CA affirmed HLURB's jurisdiction to annul mortgages."
+    ],
+    ruling: "SC affirmed: HLURB has exclusive jurisdiction to annul mortgages over subdivision open spaces. Its jurisdiction is broad enough to include complaints for annulment of mortgage. Mover must compensate BDO (P1,700,000) as it would constitute unjust enrichment not to acknowledge its debt, given the nullity of the mortgage.",
+    quote: '"The jurisdiction of the HLURB to regulate the real estate trade is broad enough to include jurisdiction over complaints for annulment of mortgage."',
+    related: ["183324"]
+  },
+  {
+    id: 16,
+    gr: "183324",
+    url: "https://lawphil.net/judjuris/juri2019/jun2019/gr_183324_2019.html",
+    year: 2019,
+    date: "June 19, 2019",
+    title: "Sps. Rodriguez vs HLURB / Sps. Nicolas vs Sps. Rodriguez",
+    court: "Supreme Court",
+    tags: ["HLURB Jurisdiction","Road Lots","Consolidation"],
+    facts: [
+      "Ruben San Gabriel Subdivision in Bocaue, Bulacan — 2 blocks with 20 residential lots and one road lot serving as access to MacArthur Highway.",
+      "Sps. Rodriguez acquired 13 lots from San Gabriel and Mendoza. In 1996, an Assignment of Right transferred San Gabriel's interest in the subdivision road to Sps. Rodriguez.",
+      "Sps. Rodriguez applied for and obtained Alteration of Plan approval that consolidated all their titles (January 1998). LMS and DENR approved consolidation plan (February 1998). TCT No. 336132 covering 4,865 sq.m. (including the road lot) was issued.",
+      "Other subdivision residents (Sps. Balbino, Nicolas, Santiago, Gamboa) filed complaints with HLURB: the road lot cannot be closed or conveyed without prior court approval (RA 440).",
+      "HLURB-RFO III: found merit — no consolidation of road lot allowed. HLURB Board: reversed (closure allowable with Alteration Plan). Board then reversed itself on MR: alteration permit did NOT cover conversion of road lot into regular lot.",
+      "Sps. Nicolas filed Petition for Indirect Contempt after Sps. Rodriguez dumped filling materials on the road lot despite a Cease and Desist Order."
+    ],
+    ruling: "SC dismissed Sps. Rodriguez' petition for failure to exhaust administrative remedies. The road lot consolidation without proper HLURB approval for conversion is not allowed. SC also dismissed the Indirect Contempt petition: Regional Trial Court (not SC) has jurisdiction over indirect contempt committed against quasi-judicial bodies like HLURB.",
+    quote: null,
+    related: ["198745"]
+  },
+  {
+    id: 17,
+    gr: "211353",
+    url: "https://lawphil.net/judjuris/juri2019/jun2019/gr_211353_2019.html",
+    year: 2019,
+    date: "June 10, 2019",
+    title: "Kwong vs Diamond Homeowners & Residents Association",
+    court: "Supreme Court",
+    tags: ["HOA Powers","Security Policy","Donated Roads"],
+    facts: [
+      "Diamond Subdivision in Angeles City had commercial establishments (beer houses, karaoke bars, night clubs) operating within it.",
+      "Angeles City Council issued Ordinance No. 132, reclassifying Diamond Subdivision as exclusively residential.",
+      "Diamond Homeowners issued a 'No Sticker, No ID, No Entry' Policy to safeguard the subdivision.",
+      "Kwong, who owns motels within the subdivision, contested the Policy and filed a complaint with HLURB.",
+      "HLURB issued a Cease and Desist Order in Kwong's favor. HLURB Arbiter later lifted it. HLURB Board reversed and declared the Policy void. OP affirmed.",
+      "CA granted Diamond Homeowners' Petition for Review and set aside the OP decision."
+    ],
+    ruling: "SC upheld the CA Decision. A homeowners' association may regulate passage into a subdivision for the safety and security of its residents, even if its roads have already been donated to the local government. The HA has the right to set goals for the promotion of safety and security, peace, comfort, and the general welfare of its residents.",
+    quote: '"A homeowners\' association may regulate passage into a subdivision for the safety and security of its residents, even if its roads have already been donated to the local government. It has the right to set goals for the promotion of safety and security, peace, comfort, and the general welfare of its residents."',
+    related: []
+  },
+  {
+    id: 18,
+    gr: "254543",
+    url: "https://lawphil.net/judjuris/juri2025/apr2025/gr_254543_2025.html",
+    year: 2025,
+    date: "April 2, 2025",
+    title: "Cadungog vs Sung Ha Jung",
+    court: "Supreme Court",
+    tags: ["HLURB Jurisdiction","Criminal Case","Civil Liability","HSAC"],
+    facts: [
+      "Vivien M. Cadungog (condominium developer) was criminally charged in the RTC for allegedly failing to deliver a title to buyer Sung Ha Jung, in violation of PD 957.",
+      "RTC acquitted the developer of the crime but issued a judgment on civil liability — ordering either a refund or delivery of the condominium unit upon payment of balance.",
+      "The civil award was challenged on the ground of lack of jurisdiction."
+    ],
+    ruling: "SC reversed the lower courts and declared the RTC's judgment on civil liability null and void for lack of jurisdiction. The civil liability was ex contractu (arising from the Contract to Sell), not ex delicto. Under PD 1344, the HSAC (formerly HLURB) has exclusive jurisdiction over claims for refund and specific performance filed by condominium unit buyers against developers. While the RTC correctly heard the criminal aspect, it had no authority to rule on the civil contractual aspect.",
+    quote: '"While the RTC correctly exercised jurisdiction over the criminal aspect of the P.D. 957 violation, it had no legal authority to rule on the civil aspect, which was purely contractual."',
+    related: ["183324", "198745"]
+  }
+];
+
+const STATUTES = [
+  {
+    name: "P.D. 953",
+    url: "https://lawphil.net/statutes/presdecs/pd1976/pd_953_1976.html",
+    fullName: "Presidential Decree No. 953",
+    date: "July 6, 1976",
+    desc: "Requiring the Planting of Trees in Certain Places and Penalizing Unauthorized Cutting of Trees",
+    provisions: [
+      { label: "Sec. 2 – Open Space Requirement", text: "Every owner of land subdivided into residential/commercial/industrial lots after the effectivity of this Decree shall reserve, develop and maintain not less than thirty percent (30%) of the total area of the subdivision, exclusive of roads, service streets and alleys, as open space for parks and recreational areas." }
+    ],
+    relatedGRs: []
+  },
+  {
+    name: "P.D. 957",
+    url: "https://lawphil.net/statutes/presdecs/pd1976/pd_957_1976.html",
+    fullName: "Presidential Decree No. 957 (The Subdivision and Condominium Buyers' Protective Decree)",
+    date: "July 12, 1976",
+    desc: "Regulates the sale of subdivision lots and condominiums, provides protective mechanisms for buyers.",
+    provisions: [
+      { label: "Sec. 22 – Alteration of Plans", text: "No owner or developer shall change or alter the roads, open spaces, infrastructures, facilities for public use and/or other form of subdivision development as contained in the approved subdivision plan and/or represented in its advertisements, without the permission of the Authority and the written conformity or consent of the duly organized homeowners association, or in the absence of the latter, by the majority of the lot buyers in the subdivision." },
+      { label: "Sec. 31 – Roads, Alleys, Sidewalks and Open Spaces (original)", text: "The registered owner or developer of the subdivision or condominium project, upon completion of the development of said project may, at his option, convey by way of donation the roads and open spaces found within the project to the city or municipality wherein the project is located." }
+    ],
+    relatedGRs: ["109404","149417","194190","264652"]
+  },
+  {
+    name: "P.D. 1216",
+    url: "https://lawphil.net/statutes/presdecs/pd1977/pd_1216_1977.html",
+    fullName: "Presidential Decree No. 1216",
+    date: "October 14, 1977",
+    desc: "Amends Sec. 31 of PD 957. Defines 'open space' and sets the key open space reservation requirements.",
+    provisions: [
+      { label: "Sec. 1 – Definition of Open Space", text: "Open Space shall mean an area reserved exclusively for parks, playgrounds, recreational uses, schools, roads, places of worship, hospitals, health centers, barangay centers and other similar facilities and amenities." },
+      { label: "Sec. 2 – Amendment to Sec. 31 of PD 957", text: "For subdivision projects one (1) hectare or more, the owner or developer shall reserve thirty percent (30%) of the gross area for open space, allocated exclusively for parks, playgrounds and recreational use: (a) 9% for high density/social housing (66-100 family lots/gross hectare); (b) 7% for medium-density/economic housing (21-65 family lots/gross hectare); (c) 3.5% for low-density/open market housing (20 family lots and below/gross hectare). These areas shall be NON-ALIENABLE public lands, and NON-BUILDABLE." },
+      { label: "Sec. 2 – Donation Clause", text: "Upon their completion as certified to by the Authority, the roads, alleys, sidewalks and playgrounds shall be donated by the owner or developer to the city or municipality and it shall be mandatory for the local governments to accept; provided, however, that the parks and playgrounds may be donated to the Homeowners Association of the project with the consent of the city or municipality concerned. No portion of the parks and playgrounds donated thereafter shall be converted to any other purpose or purposes." }
+    ],
+    relatedGRs: ["149417","194190","220042","264652","198745"]
+  },
+  {
+    name: "B.P. 220",
+    url: "https://lawphil.net/statutes/bataspam/bp1982/bp_220_1982.html",
+    fullName: "Batas Pambansa Blg. 220 / IRR",
+    date: "IRR Approved November 3, 1982",
+    desc: "Authorizes the Ministry of Human Settlements to establish different standards for economic and socialized housing in urban and rural areas.",
+    provisions: [
+      { label: "Sec. 23 IRR – Donation of Roads, Open Spaces and Water Supply", text: "The owner or project developer shall donate the roads and open spaces found in the project to the local government of the area after their completion had been certified to by the Board and it shall be mandatory for the said local government to accept such donations. Parks and playgrounds may be donated to the duly accredited Homeowners Association of the project with the consent of the city or municipality concerned under PD 1216." }
+    ],
+    relatedGRs: []
+  },
+  {
+    name: "R.A. 9904",
+    url: "https://lawphil.net/statutes/repacts/ra2010/ra_9904_2010.html",
+    fullName: "Republic Act No. 9904 (Magna Carta for Homeowners and Homeowners' Associations)",
+    date: "2010",
+    desc: "Governs the rights and powers of homeowners associations, including powers over water systems.",
+    provisions: [
+      { label: "Sec. 10(g) – HOA Powers re: Waterworks", text: "Ensure the availability of quality water services at a reasonable price and, at its option, administer and manage the waterworks system of the subdivision. NOTE: The legislature expressly DELETED the mandatory turnover provision from earlier Senate Bills — per DAALCO (2024), the HOA cannot compel turnover of waterworks management from the developer." }
+    ],
+    relatedGRs: ["264652"]
+  }
+];
+
+const QA = [
+  {
+    q: "May developers of a subdivision be compelled to donate street areas or road lots to the LGU?",
+    a: "No. The Supreme Court, as early as 1941 in Young v. City of Manila (G.R. No. 48194) held that a developer cannot be compelled to donate street areas. This was definitively reaffirmed in DPWH v. Sps. Llamas (G.R. No. 194190, 2017), where the SC held that the compulsion to donate under Sec. 31 of P.D. 957 'cannot be sustained as valid.' Donation requires animus donandi (intent to donate) — it is an act of liberality that cannot be forced. Compulsory donation is an illegal taking.",
+    cases: ["48194","128131","194190","264652"]
+  },
+  {
+    q: "Is a city ordinance which declares privately titled road lots a public road a valid exercise of police power?",
+    a: "No. In Equitable PCI Bank v. South Rich Acres (G.R. No. 202384, 2021), the SC declared null and void a city ordinance which declared privately titled road lots as a public road. While the enactment may have been for the benefit of the public, the constitutional prohibition on taking private property for public use without just compensation prevents the LGU from doing so. Road lots remain private property of the owner-developer until acquired by the LGU by donation, purchase, or expropriation.",
+    cases: ["202384","128131","194190"]
+  },
+  {
+    q: "Between the Homeowners' Association and the barangay, who has administrative rights over a multi-purpose hall where the funds for its construction were taken from government funds?",
+    a: "The barangay enjoys the authority to administer the multi-purpose hall because the cost of its construction was sourced from government funds, even if the HA is considered the owner of the open space. Under RA 7160, Sec. 391(a)(7), the Sangguniang Barangay has the power to regulate the use of multi-purpose halls constructed with government funds. However, the barangay's authority is purely administrative — they cannot exercise acts of ownership over the open space or the surrounding areas. (United BF Homeowners' Association v. Barangay Chairman, G.R. No. 140092, 2006)",
+    cases: ["140092"]
+  },
+  {
+    q: "Whether the sale of a privately titled parcel of land where the water facility is located violates regulations requiring adequate water facilities in subdivisions?",
+    a: "Yes, based on Liwag v. Happy Glen Loop Homeowners Association (G.R. No. 189755, 2012). The SC upheld the HLURB's annulment of the deed of sale over a privately titled lot where a water facility was installed and used by residents as their sole source of water for more than 30 years. The SC held: (1) an easement of water facility was acquired by prescription after 10 years of continuous and apparent use; (2) the water facility location forms part of the open space under the principle of ejusdem generis; and (3) open spaces are beyond the commerce of man — the sale was void. Note: DAALCO (2024) clarified that Sec. 31 of PD 957 does NOT require the donation of water facility lots (only roads, alleys, sidewalks, and playgrounds), but the property's character as open space can still make it non-alienable.",
+    cases: ["189755","264652"]
+  },
+  {
+    q: "May a homeowners' association regulate passage through a subdivision's roads even if those roads have already been donated to the LGU?",
+    a: "Yes. In Kwong v. Diamond Homeowners & Residents Association (G.R. No. 211353, 2019), the SC held that a homeowners' association may regulate passage into a subdivision for the safety and security of its residents, even if its roads have already been donated to the local government. The HA has the right to promote the safety and security, peace, comfort, and general welfare of its residents.",
+    cases: ["211353"]
+  }
+];
+
+const TIMELINE_EVENTS = [
+  { year: 1941, type: "case", title: "Young vs City of Manila", desc: "No compulsion to donate street areas to LGU", gr: "48194" },
+  { year: 1976, type: "law", title: "P.D. 953 enacted", desc: "30% open space requirement for subdivisions" },
+  { year: 1976, type: "law", title: "P.D. 957 enacted", desc: "Subdivision and Condominium Buyers' Protective Decree — original donation clause (optional)" },
+  { year: 1977, type: "law", title: "P.D. 1216 enacted", desc: "Amends Sec. 31 of P.D. 957; defines open space; sets density-based open space standards; open space = non-alienable, non-buildable" },
+  { year: 1982, type: "law", title: "IRR of B.P. 220 approved", desc: "Separate standards for economic and socialized housing" },
+  { year: 1991, type: "case", title: "White Plains Association vs Legaspi", desc: "SC directed developer to donate Road Lot 1 to QC LGU; later modified (1994) to retain title with lien for C-5", gr: "95522" },
+  { year: 1994, type: "case", title: "White Plains Resolution (1994)", desc: "SC modified 1991 decision — developer retains title with lien for C-5 highway", gr: "95522" },
+  { year: 1995, type: "case", title: "Sps. Anonuevo vs CA", desc: "Torrens title indefeasibility doesn't protect transferee with notice of flaw; open space designation enforceable", gr: "113739" },
+  { year: 1996, type: "case", title: "Eugenio vs Exec. Sec. Drilon", desc: "PD 957 has retroactive effect — applies to pre-1976 contracts to protect subdivision buyers", gr: "109404" },
+  { year: 1998, type: "case", title: "White Plains HOA vs CA (1998)", desc: "SC reversed 1991 decision: open spaces are private until donated/expropriated; C-5 bypass = no more purpose for reservation", gr: "128131" },
+  { year: 2004, type: "case", title: "Dueñas vs Santos Subdivision HOA", desc: "PD 1216 does NOT have retroactive effect; Eugenio inapplicable where no non-development or non-payment", gr: "149417" },
+  { year: 2006, type: "case", title: "Albon vs Fernando", desc: "Ownership of subdivision sidewalks must be determined before LGU can use public funds on them; SC remanded to RTC", gr: "148357" },
+  { year: 2006, type: "case", title: "United BF HOA vs Barangay, BF Homes", desc: "Barangay administers multi-purpose hall built with government funds, even if HA owns the open space", gr: "140092" },
+  { year: 2012, type: "case", title: "Liwag vs Happy Glen Loop HOA", desc: "Water facility used as sole source for 30 years = open space by prescription; sale of lot is void", gr: "189755" },
+  { year: 2015, type: "case", title: "HATVI vs J.M. Tuason", desc: "Deed of donation void for lack of notarization and absence of donee's acceptance", gr: "203883" },
+  { year: 2016, type: "case", title: "BDO vs Sunnyside Heights HOA", desc: "HLURB has broad jurisdiction including mortgage annulment over subdivision open spaces", gr: "198745" },
+  { year: 2017, type: "case", title: "DPWH vs Sps. Llamas", desc: "CATEGORICAL: compulsory donation under Sec. 31 PD 957 is invalid; forced donation = illegal taking", gr: "194190" },
+  { year: 2018, type: "case", title: "Casa Milan HOA vs RCAM", desc: "Open spaces belong primarily to the developer; freedom to retain or dispose; exception: LGU approval + resident consent", gr: "220042" },
+  { year: 2019, type: "case", title: "Sps. Rodriguez vs HLURB", desc: "HLURB has jurisdiction over road lot consolidation issues; failure to exhaust admin remedies = dismissal", gr: "183324" },
+  { year: 2019, type: "case", title: "Kwong vs Diamond HOA", desc: "HOA may regulate passage even after roads donated to LGU; safety and security goals are valid", gr: "211353" },
+  { year: 2021, type: "case", title: "EPCIB vs South Rich Acres", desc: "City ordinance declaring private road lots public = unconstitutional; beyond police power without just compensation", gr: "202384" },
+  { year: 2024, type: "case", title: "DAALCO vs Palmas del Mar HOA", desc: "Developer not required to donate water facility lots; Sec. 31 covers only roads/alleys/sidewalks/playgrounds; no compulsory turnover of waterworks", gr: "264652" },
+  { year: 2025, type: "case", title: "Cadungog vs Sung Ha Jung", desc: "RTC has no jurisdiction over civil liability ex contractu in PD 957 criminal case; HSAC has exclusive civil jurisdiction", gr: "254543" }
+];
+
+// ===========================
+// STATE
+// ===========================
+let currentPanel = 'overview';
+let searchTerm = '';
+let activeTopic = '';
+let currentModalIndex = -1;
+let filteredCases = [...CASES];
+
+// ===========================
+// RENDER
+// ===========================
+function renderCases() {
+  const grid = document.getElementById('cases-grid');
+  let list = CASES.filter(c => {
+    const matchSearch = !searchTerm ||
+      c.title.toLowerCase().includes(searchTerm) ||
+      c.gr.includes(searchTerm) ||
+      String(c.year).includes(searchTerm) ||
+      c.tags.some(t => t.toLowerCase().includes(searchTerm)) ||
+      c.ruling.toLowerCase().includes(searchTerm) ||
+      c.facts.some(f => f.toLowerCase().includes(searchTerm));
+    const matchTopic = !activeTopic || c.tags.some(t => t.toLowerCase().includes(activeTopic.toLowerCase()));
+    return matchSearch && matchTopic;
+  });
+  filteredCases = list;
+  document.getElementById('result-count').textContent = currentPanel === 'cases' ? `${list.length} case${list.length !== 1 ? 's' : ''}` : '';
+  if (list.length === 0) {
+    grid.innerHTML = '<div class="case-no-results">No cases match your search or filter.</div>';
+    return;
+  }
+  grid.innerHTML = list.map((c, i) => `
+    <div class="case-card" onclick="openCase(${CASES.indexOf(c)})">
+      <div class="case-card-header">
+        <div class="case-year">${c.year} &nbsp;·&nbsp; SC Decision</div>
+        <div class="case-title">${highlight(c.title)}</div>
+        <div class="case-gr">G.R. No. ${c.gr} &nbsp;·&nbsp; ${c.date}</div>
+      </div>
+      <div class="case-tags">${c.tags.map(t => `<span class="tag ${tagClass(t)}">${t}</span>`).join('')}</div>
+      <div class="case-ruling-preview">${highlight(c.ruling.substring(0, 140))}…</div>
+      ${c.url ? `<div style="padding:0 16px 12px;"><a class="lawphil-btn-sm" href="${c.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Full decision on Lawphil</a></div>` : ''}
+    </div>
+  `).join('');
+}
+
+function tagClass(t) {
+  const map = { 'donation': 'donation', 'ownership': 'ownership', 'hlurb jurisdiction': 'jurisdiction', 'retroactivity': 'retroactivity', 'expropriation': 'expropriation', 'police power': 'police-power', 'water facilities': 'water', 'estoppel': 'estoppel' };
+  return map[t.toLowerCase()] || '';
+}
+
+function highlight(text) {
+  if (!searchTerm) return text;
+  const re = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return text.replace(re, '<mark>$1</mark>');
+}
+
+function renderStatutes() {
+  const c = document.getElementById('statutes-container');
+  c.innerHTML = STATUTES.map((s, i) => `
+    <div class="statute-card" id="stat-${i}">
+      <div class="statute-header" onclick="toggleStatute(${i})">
+        <div>
+          <div class="statute-name">${s.name} — ${s.fullName}</div>
+          <div class="statute-date">${s.date}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          ${s.url ? `<a class="statute-link" href="${s.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Lawphil</a>` : ''}
+          <span class="statute-toggle">▼</span>
+        </div>
+      </div>
+      <div class="statute-body">
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;line-height:1.5;">${s.desc}</p>
+        ${s.provisions.map(p => `
+          <div class="provision">
+            <div class="provision-label">${p.label}</div>
+            <div class="prov-text">${p.text}</div>
+          </div>
+        `).join('')}
+        ${s.relatedGRs.length ? `
+          <div class="related-cases">
+            <span>Related cases:</span>
+            ${s.relatedGRs.map(gr => {
+              const c2 = CASES.find(x => x.gr === gr);
+              return c2 ? `<span class="related-case-link" onclick="openCaseByGR('${gr}')">${c2.title}</span>` : '';
+            }).join('')}
+          </div>
+        ` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderQA() {
+  const c = document.getElementById('qa-container');
+  c.innerHTML = QA.map((qa, i) => `
+    <div class="qa-item" id="qa-${i}">
+      <div class="qa-q" onclick="toggleQA(${i})">
+        <span class="qa-q-label">Q</span>
+        <span class="qa-q-text">${qa.q}</span>
+        <span class="qa-expand">▼</span>
+      </div>
+      <div class="qa-a">
+        <span class="qa-a-label">A</span>
+        <div class="qa-a-text">${qa.a}</div>
+        ${qa.cases.length ? `<div style="margin-top:10px;font-size:12px;color:var(--text-muted);">
+          Related cases: ${qa.cases.map(gr => {
+            const c2 = CASES.find(x => x.gr === gr);
+            return c2 ? `<span class="cite-link" onclick="openCaseByGR('${gr}')">${c2.title}</span>` : '';
+          }).filter(Boolean).join(' &nbsp;·&nbsp; ')}
+        </div>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderTimeline() {
+  const c = document.getElementById('timeline-container');
+  const events = [...TIMELINE_EVENTS].sort((a, b) => a.year - b.year);
+  c.innerHTML = events.map(e => `
+    <div class="tl-item">
+      <div class="tl-dot ${e.type}" onclick="${e.gr ? `openCaseByGR('${e.gr}')` : ''}"></div>
+      <div class="tl-card" onclick="${e.gr ? `openCaseByGR('${e.gr}')` : ''}">
+        <div class="tl-year">${e.year}</div>
+        <div class="tl-title">${e.title}</div>
+        <div class="tl-desc">${e.desc}</div>
+        <span class="tl-badge ${e.type}">${e.type === 'law' ? 'Statute' : 'Case'}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ===========================
+// MODAL
+// ===========================
+function openCase(idx) {
+  currentModalIndex = idx;
+  const c = CASES[idx];
+  document.getElementById('modal-yr-gr').textContent = `G.R. No. ${c.gr} · ${c.date}`;
+  document.getElementById('modal-title').textContent = c.title;
+  document.getElementById('modal-tags').innerHTML = c.tags.map(t => `<span class="tag ${tagClass(t)}">${t}</span>`).join('') +
+    (c.url ? ` <a class="lawphil-btn" href="${c.url}" target="_blank" rel="noopener" style="margin-left:8px;">↗ Full Decision on Lawphil</a>` : '<span style="font-size:11px;color:var(--text-muted);margin-left:8px;font-style:italic;">Not digitised on Lawphil</span>');
+  const factsEl = document.getElementById('modal-facts');
+  factsEl.innerHTML = `<ul>${c.facts.map(f => `<li>${f}</li>`).join('')}</ul>`;
+  document.getElementById('modal-ruling').innerHTML = `<div class="ruling-box">${c.ruling}</div>`;
+  const qsec = document.getElementById('modal-quote-sec');
+  if (c.quote) {
+    qsec.style.display = 'block';
+    document.getElementById('modal-quote').innerHTML = `<div class="quote-block">${c.quote}</div>`;
+  } else { qsec.style.display = 'none'; }
+  const rsec = document.getElementById('modal-related-sec');
+  if (c.related && c.related.length) {
+    rsec.style.display = 'block';
+    document.getElementById('modal-related').innerHTML = c.related.map(gr => {
+      const r = CASES.find(x => x.gr === gr);
+      return r ? `<span class="cite-link" onclick="openCaseByGR('${gr}')">${r.title} (${r.year})</span>` : '';
+    }).filter(Boolean).join(' &nbsp;·&nbsp; ');
+  } else { rsec.style.display = 'none'; }
+  document.getElementById('modal-prev').disabled = idx === 0;
+  document.getElementById('modal-next').disabled = idx === CASES.length - 1;
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('modal').scrollTop = 0;
+}
+
+function openCaseByGR(gr) {
+  const idx = CASES.findIndex(c => c.gr === gr);
+  if (idx >= 0) { showPanel('cases'); openCase(idx); }
+}
+
+function navigateModal(dir) {
+  const newIdx = currentModalIndex + dir;
+  if (newIdx >= 0 && newIdx < CASES.length) openCase(newIdx);
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('modal-overlay').classList.remove('open'); });
+
+// ===========================
+// NAV / SEARCH / FILTER
+// ===========================
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('visible'));
+  document.getElementById('panel-' + name).classList.add('visible');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navLabel = {overview:'overview',cases:'cases',statutes:'statutes',qa:'q',timeline:'timeline',websearch:'web'};
+  document.querySelectorAll('.nav-item').forEach(n => { if (n.textContent.trim().toLowerCase().startsWith(navLabel[name]||name[0])) n.classList.add('active'); });
+  // Sync mobile bottom tab bar
+  document.querySelectorAll('#mobile-nav button').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.panel === name);
+  });
+  currentPanel = name;
+  if (name === 'cases') { renderCases(); document.getElementById('result-count').textContent = `${filteredCases.length} cases`; }
+  else document.getElementById('result-count').textContent = '';
+}
+
+function onSearch() {
+  searchTerm = document.getElementById('search').value.toLowerCase().trim();
+  if (currentPanel !== 'cases') showPanel('cases');
+  renderCases();
+}
+
+function filterTopic(topic) {
+  activeTopic = activeTopic === topic ? '' : topic;
+  document.querySelectorAll('.topic-chip').forEach(c => {
+    c.classList.toggle('active', c.textContent === topic && activeTopic);
+  });
+  showPanel('cases');
+  renderCases();
+}
+
+function clearAll() {
+  searchTerm = '';
+  activeTopic = '';
+  document.getElementById('search').value = '';
+  document.querySelectorAll('.topic-chip').forEach(c => c.classList.remove('active'));
+  document.getElementById('result-count').textContent = '';
+  renderCases();
+}
+
+function sortCases(val) {
+  if (val === 'year-asc') CASES.sort((a, b) => a.year - b.year);
+  else if (val === 'year-desc') CASES.sort((a, b) => b.year - a.year);
+  else if (val === 'title') CASES.sort((a, b) => a.title.localeCompare(b.title));
+  renderCases();
+}
+
+function toggleStatute(i) {
+  const el = document.getElementById('stat-' + i);
+  el.classList.toggle('open');
+}
+
+function toggleQA(i) {
+  const el = document.getElementById('qa-' + i);
+  el.classList.toggle('open');
+}
+
+// ===========================
+// INIT
+// ===========================
+renderCases();
+renderStatutes();
+renderQA();
+renderTimeline();
+
+// Sync mobile bottom tab active state on init
+(function initMobileNav() {
+  document.querySelectorAll('#mobile-nav button').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.panel === currentPanel);
+  });
+})();
+</script>
+
+<nav id="mobile-nav" aria-label="Mobile navigation">
+  <button onclick="showPanel('overview')" data-panel="overview">
+    <span>🏛</span><label>Overview</label>
+  </button>
+  <button onclick="showPanel('cases')" data-panel="cases">
+    <span>📋</span><label>Cases</label>
+  </button>
+  <button onclick="showPanel('statutes')" data-panel="statutes">
+    <span>📜</span><label>Statutes</label>
+  </button>
+  <button onclick="showPanel('qa')" data-panel="qa">
+    <span>❓</span><label>Q&A</label>
+  </button>
+  <button onclick="showPanel('timeline')" data-panel="timeline">
+    <span>🕐</span><label>Timeline</label>
+  </button>
+</nav>
+<footer class="site-footer"><a href="/">Copyright 2026. LexNotesPH. Atty. Cat Hermoso.</a></footer>
+</body>
+</html>
